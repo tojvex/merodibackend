@@ -9,23 +9,55 @@ import { Repository } from 'typeorm';
 export class MusicRepository {
     constructor(@InjectRepository (Music)
 private MusicRepository: Repository <Music>) {}
-  create(createMusicDto: CreateMusicDto) {
-    return this.MusicRepository
+  async create(createMusicDto: CreateMusicDto) {
+    
+    const music =  await this.MusicRepository
+    .createQueryBuilder()
+    .insert()
+    .into(Music)
+    .values(createMusicDto)
+    .execute()
+
+    return music.generatedMaps[0]
+    
   }
 
   findAll() {
-    return `This action returns all music`;
+    return this.MusicRepository
+    .createQueryBuilder()
+    .getMany()
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} music`;
+    return this.MusicRepository
+    .createQueryBuilder('music')
+    .where('music.id = :id', {id})
+    .getOne()
   }
 
-  update(id: number, updateMusicDto: UpdateMusicDto) {
-    return `This action updates a #${id} music`;
+ async update(id: number, updateMusicDto: UpdateMusicDto) {
+    await this.MusicRepository
+    .createQueryBuilder('music')
+    .update()
+    .set(updateMusicDto)
+    .execute()
+
+    return this.MusicRepository.findOneBy({id})
+  
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} music`;
+  async remove(id: number) {
+    await this.MusicRepository
+      .createQueryBuilder('music')
+      .softDelete()
+      .from(Music)
+      .where('music.id = :id', {id})
+      .execute()
+
+   return this.MusicRepository
+      .createQueryBuilder('music')
+      .withDeleted()
+      .where('music.id = :id', {id} )
+      .execute()
   }
 }
