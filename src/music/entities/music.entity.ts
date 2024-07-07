@@ -9,7 +9,7 @@ export class Music {
     name: string;
 
     @Column()
-    artistId: number;
+    authorId: number;
 
     @Column()
     duration: number;
