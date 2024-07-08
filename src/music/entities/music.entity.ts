@@ -14,8 +14,6 @@ export class MusicEntity {
     @Column()
     duration: number;
 
-    @Column({nullable: true})
-    authorId: number;
 
     @Column({nullable: true})
     albumId: number
