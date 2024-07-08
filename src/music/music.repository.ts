@@ -2,19 +2,18 @@ import { Injectable } from '@nestjs/common';
 import { CreateMusicDto } from './dto/create-music.dto';
 import { UpdateMusicDto } from './dto/update-music.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Music } from './entities/music.entity';
+import { MusicEntity } from './entities/music.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class MusicRepository {
-    constructor(@InjectRepository (Music)
-private MusicRepository: Repository <Music>) {}
+    constructor(@InjectRepository (MusicEntity)
+private MusicRepository: Repository <MusicEntity>) {}
   async create(createMusicDto: CreateMusicDto) {
     
     const music =  await this.MusicRepository
     .createQueryBuilder()
     .insert()
-    .into(Music)
     .values(createMusicDto)
     .execute()
 
@@ -22,17 +21,20 @@ private MusicRepository: Repository <Music>) {}
     
   }
 
-  findAll() {
-    return this.MusicRepository
+ async findAll() {
+   return await  this.MusicRepository
     .createQueryBuilder()
     .getMany()
+
+    
   }
 
-  findOne(id: number) {
-    return this.MusicRepository
+async  findOne(id: number) {
+   return await this.MusicRepository
     .createQueryBuilder('music')
     .where('music.id = :id', {id})
     .getOne()
+
   }
 
  async update(id: number, updateMusicDto: UpdateMusicDto) {
@@ -50,7 +52,7 @@ private MusicRepository: Repository <Music>) {}
     await this.MusicRepository
       .createQueryBuilder('music')
       .softDelete()
-      .from(Music)
+      .from(MusicEntity)
       .where('music.id = :id', {id})
       .execute()
 

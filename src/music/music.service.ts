@@ -6,23 +6,23 @@ import { MusicRepository } from './music.repository';
 @Injectable()
 export class MusicService {
   constructor(private readonly MusicRepository:MusicRepository) {}
-  create(createMusicDto: CreateMusicDto) {
-    return this.MusicRepository.create(createMusicDto);
+ async create(createMusicDto: CreateMusicDto) {
+    return await this.MusicRepository.create(createMusicDto);
   }
 
-  findAll() {
-    return this.MusicRepository.findAll();
+ async findAll() {
+    return await this.MusicRepository.findAll();
   }
 
-  findOne(id: number) {
-    return this.MusicRepository.findOne(id);
+ async findOne(id: number) {
+    return await this.MusicRepository.findOne(id);
   }
 
-  update(id: number, updateMusicDto: UpdateMusicDto) {
-    return this.MusicRepository.update(id, updateMusicDto);
+ async update(id: number, updateMusicDto: UpdateMusicDto) {
+    return await this.MusicRepository.update(id, updateMusicDto);
   }
 
-  remove(id: number) {
-    return this.MusicRepository.remove(id)
+  async remove(id: number) {
+    return await this.MusicRepository.remove(id)
   }
 }

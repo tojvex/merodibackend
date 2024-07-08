@@ -3,10 +3,10 @@ import { MusicService } from './music.service';
 import { MusicController } from './music.controller';
 import { MusicRepository } from './music.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Music } from './entities/music.entity';
+import { MusicEntity } from './entities/music.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Music])],
+  imports: [TypeOrmModule.forFeature([MusicEntity])],
   controllers: [MusicController],
   providers: [MusicService, MusicRepository],
 })
