@@ -1,20 +1,19 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Author } from "./entities/author.entity";
+import { AuthorEntity } from "./entities/author.entity";
 import { Repository } from "typeorm";
 import { CreateAuthorDto } from "./dtos/create-author.dto";
 import { UpdateAuthorDto } from "./dtos/update-author.dto";
 
 @Injectable()
 export class AuthorRepository {
-    constructor (@InjectRepository(Author)
-                    private authorRepository: Repository<Author>) {}
+    constructor (@InjectRepository(AuthorEntity)
+                    private authorRepository: Repository<AuthorEntity>) {}
 
    async create(createAuthorDto :  CreateAuthorDto){
         const author = await this.authorRepository
         .createQueryBuilder()
         .insert()
-        .into(Author)
         .values(createAuthorDto)
         .execute()
 
@@ -22,17 +21,17 @@ export class AuthorRepository {
 
     }
 
-    findAll() {
+  async  findAll() {
 
-        return  this.authorRepository
+        return await this.authorRepository
         .createQueryBuilder()
         .getMany()
 
     }
 
-    findOne(id:number) {
+   async findOne(id:number) {
 
-        return this.authorRepository
+        return await this.authorRepository
         .createQueryBuilder('author')
         .where('author.id = :id', {id})
         .getOne()
@@ -58,7 +57,7 @@ export class AuthorRepository {
     await this.authorRepository
     .createQueryBuilder('author')
     .softDelete()
-    .from(Author)
+    .from(AuthorEntity)
     .where('author.id = :id', {id})
     .execute()
 

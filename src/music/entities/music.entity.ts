@@ -1,8 +1,8 @@
-import { Author } from "src/author/entities/author.entity";
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { AuthorEntity } from "src/author/entities/author.entity";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
-export class Music {
+export class MusicEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -16,8 +16,8 @@ export class Music {
     duration: number;
 
 
-    @ManyToOne( () => Author, (author) => author.musics)
-    author: Author
+    @ManyToMany( () => AuthorEntity, (author) => author.musics)
+    authors: AuthorEntity[]
 
     @CreateDateColumn()
     createdAt: Date;
