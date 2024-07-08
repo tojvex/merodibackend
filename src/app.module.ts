@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MusicModule } from './music/music.module';
+import { AlbumModule } from './album/album.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { MusicModule } from './music/music.module';
 
     }),
     MusicModule,
+    AlbumModule,
   ],
   controllers: [AppController],
   providers: [AppService],

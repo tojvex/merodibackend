@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { AlbumEntity } from "src/album/entities/album.entity";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class MusicEntity {
@@ -8,11 +9,18 @@ export class MusicEntity {
     @Column({type: 'varchar'})
     name: string;
 
-    @Column()
-    authorId: number;
 
     @Column()
     duration: number;
+
+    @Column({nullable: true})
+    authorId: number;
+
+    @Column({nullable: true})
+    albumId: number
+
+    @ManyToOne(() => AlbumEntity, (album) => album.musics)
+    album: AlbumEntity
 
 
     @CreateDateColumn()
