@@ -23,7 +23,8 @@ private MusicRepository: Repository <MusicEntity>) {}
 
  async findAll() {
    return await  this.MusicRepository
-    .createQueryBuilder()
+    .createQueryBuilder('music')
+    .leftJoinAndSelect('music.album', 'album')
     .getMany()
 
     
