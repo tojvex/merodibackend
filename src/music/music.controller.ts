@@ -8,27 +8,27 @@ export class MusicController {
   constructor(private readonly musicService: MusicService) {}
 
   @Post()
-  create(@Body() createMusicDto: CreateMusicDto) {
-    return this.musicService.create(createMusicDto);
+  async create(@Body() createMusicDto: CreateMusicDto) {
+    return await this.musicService.create(createMusicDto);
   }
 
   @Get()
-  findAll() {
-    return this.musicService.findAll();
+  async findAll() {
+    return await this.musicService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.musicService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return await this.musicService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMusicDto: UpdateMusicDto) {
-    return this.musicService.update(+id, updateMusicDto);
+  async update(@Param('id') id: string, @Body() updateMusicDto: UpdateMusicDto) {
+    return await this.musicService.update(+id, updateMusicDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.musicService.remove(+id);
+ async remove(@Param('id') id: string) {
+    return await this.musicService.remove(+id);
   }
 }

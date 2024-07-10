@@ -44,7 +44,7 @@ async  findOne(id: number) {
     .set(updateAlbumDto)
     .execute()
 
-    return this.AlbumRepository.findOneBy({id})
+    return await this.AlbumRepository.findOneBy({id})
   
   }
 
@@ -56,10 +56,10 @@ async  findOne(id: number) {
       .where('album.id = :id', {id})
       .execute()
 
-   return this.AlbumRepository
+   return await this.AlbumRepository
       .createQueryBuilder('album')
       .withDeleted()
       .where('album.id = :id', {id} )
-      .execute()
+      .getOne()
   }
 }

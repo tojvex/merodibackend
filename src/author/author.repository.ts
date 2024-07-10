@@ -41,31 +41,31 @@ export class AuthorRepository {
 
     async update(id: number, updateAuthorDto: UpdateAuthorDto) {
         await this.AuthorRepository
-        .createQueryBuilder('author')
+        .createQueryBuilder()
         .update()
         .set(updateAuthorDto)
-        .where('author.id = :id', {id})
+        .where('id = :id', {id})
         .execute()
 
-        return this.AuthorRepository
-        .createQueryBuilder('author')
-        .where('author.id = :id', {id} )
+        return await this.AuthorRepository
+        .createQueryBuilder()
+        .where('id = :id', {id} )
         .getOne()
 
     }
 
     async remove(id: number) {
         await this.AuthorRepository
-        .createQueryBuilder('author')
+        .createQueryBuilder()
         .softDelete()
         .from(AuthorEntity)
-        .where('author.id', {id})
+        .where('id', {id})
         .execute()
 
-        return this.AuthorRepository
-        .createQueryBuilder('author')
+        return await this.AuthorRepository
+        .createQueryBuilder()
         .withDeleted()
-        .where('author.id', {id})
+        .where('id', {id})
         .getOne()
         
     }
