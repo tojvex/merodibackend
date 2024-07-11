@@ -5,7 +5,7 @@ import { AuthorRepository } from './author.repository';
 
 @Injectable()
 export class AuthorService {
-  constructor(private readonly authorRepository: AuthorRepository) {}
+  constructor(private readonly authorRepository: AuthorRepository) { }
   create(createAuthorDto: CreateAuthorDto) {
     return this.authorRepository.create(createAuthorDto);
   }
