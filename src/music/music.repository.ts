@@ -31,14 +31,14 @@ export class MusicRepository {
 
  
   async findAll() {
-    return await this.musicRepository
+    return await this.MusicRepository
       .createQueryBuilder('music')
       .leftJoinAndSelect('music.album', 'album')
       .getMany()
   }
 
   async findOne(id: number) {
-    return await this.musicRepository
+    return await this.MusicRepository
       .createQueryBuilder('music')
       .where('music.id = :id', { id })
       .getOne()
@@ -46,13 +46,13 @@ export class MusicRepository {
   }
 
   async update(id: number, updateMusicDto: UpdateMusicDto) {
-    await this.musicRepository
+    await this.MusicRepository
       .createQueryBuilder('music')
       .update()
       .set(updateMusicDto)
       .execute()
 
-    return this.musicRepository.findOneBy({ id })
+    return this.MusicRepository.findOneBy({ id })
 
   }
 

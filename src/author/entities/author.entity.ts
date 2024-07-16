@@ -4,7 +4,7 @@ import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinTable, ManyToMa
 
 @Entity()
 export class AuthorEntity {
-    
+
     @PrimaryGeneratedColumn()
     id: number
 
@@ -14,7 +14,7 @@ export class AuthorEntity {
     @Column()
     lastName: string
 
-    @Column({type: 'longtext'})
+    @Column({ type: 'longtext' })
     biography: string
 
     @ManyToMany(() => MusicEntity, (musics) => musics.authors)
