@@ -25,37 +25,35 @@ export class MusicRepository {
     .insert()
     .values(createMusicDto)
     .execute()
-
     return music.generatedMaps[0]
-    
   }
 
- async findAll() {
-   return await  this.musicRepository
-    .createQueryBuilder('music')
-    .leftJoinAndSelect('music.album', 'album')
-    .getMany()
 
-    
+ 
+  async findAll() {
+    return await this.musicRepository
+      .createQueryBuilder('music')
+      .leftJoinAndSelect('music.album', 'album')
+      .getMany()
   }
 
-async  findOne(id: number) {
-   return await this.musicRepository
-    .createQueryBuilder('music')
-    .where('music.id = :id', {id})
-    .getOne()
+  async findOne(id: number) {
+    return await this.musicRepository
+      .createQueryBuilder('music')
+      .where('music.id = :id', { id })
+      .getOne()
 
   }
 
- async update(id: number, updateMusicDto: UpdateMusicDto) {
+  async update(id: number, updateMusicDto: UpdateMusicDto) {
     await this.musicRepository
-    .createQueryBuilder('music')
-    .update()
-    .set(updateMusicDto)
-    .execute()
+      .createQueryBuilder('music')
+      .update()
+      .set(updateMusicDto)
+      .execute()
 
-    return this.musicRepository.findOneBy({id})
-  
+    return this.musicRepository.findOneBy({ id })
+
   }
 
   async remove(id: number) {
@@ -63,13 +61,13 @@ async  findOne(id: number) {
       .createQueryBuilder('music')
       .softDelete()
       .from(MusicEntity)
-      .where('music.id = :id', {id})
+      .where('music.id = :id', { id })
       .execute()
 
-   return this.musicRepository
+    return this.musicRepository
       .createQueryBuilder('music')
       .withDeleted()
-      .where('music.id = :id', {id} )
+      .where('music.id = :id', { id })
       .execute()
   }
 
