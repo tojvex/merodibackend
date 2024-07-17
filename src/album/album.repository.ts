@@ -5,62 +5,61 @@ import { AlbumEntity } from './entities/album.entity';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 
-@Injectable()
-export class AlbumRepository {
-  
-  constructor(@InjectRepository(AlbumEntity)
-  private AlbumRepository: Repository<AlbumEntity>) { }
-  
-  async create(createalbumDto: CreateAlbumDto) {
-
-    const album = await this.AlbumRepository
+  @Injectable()
+  export class AlbumRepository {
+      constructor(@InjectRepository (AlbumEntity)
+  private albumRepository: Repository <AlbumEntity>) {}
+    async create(createAlbumDto: CreateAlbumDto) {
+      
+      const album =  await this.albumRepository
       .createQueryBuilder()
       .insert()
-      .values(createalbumDto)
+      .values(createAlbumDto)
       .execute()
 
-    return album.generatedMaps[0]
-  }
+      return album.generatedMaps[0]
+      
+    }
 
   async findAll() {
-    return await this.AlbumRepository
+    return await  this.albumRepository
       .createQueryBuilder()
       .getMany()
 
+      
+    }
 
-  }
-
-  async findOne(id: number) {
-    return await this.AlbumRepository
+  async  findOne(id: number) {
+    return await this.albumRepository
       .createQueryBuilder('album')
-      .where('album.id = :id', { id })
+      .where('album.id = :id', {id})
       .getOne()
 
-  }
+    }
 
   async update(id: number, updateAlbumDto: UpdateAlbumDto) {
-    await this.AlbumRepository
+      await this.albumRepository
       .createQueryBuilder('album')
       .update()
       .set(updateAlbumDto)
       .execute()
 
-    return await this.AlbumRepository.findOneBy({ id })
+      return await this.albumRepository.findOneBy({ id })
+    
+    }
 
+    async remove(id: number) {
+      await this.albumRepository
+        .createQueryBuilder('album')
+        .softDelete()
+        .from(AlbumEntity)
+        .where('album.id = :id', { id })
+        .execute()
+
+    return await this.albumRepository
+        .createQueryBuilder('album')
+        .withDeleted()
+        .where('album.id = :id', { id } )
+        .getOne()
+    }
   }
-
-  async remove(id: number) {
-    await this.AlbumRepository
-      .createQueryBuilder('album')
-      .softDelete()
-      .from(AlbumEntity)
-      .where('album.id = :id', { id })
-      .execute()
-
-    return await this.AlbumRepository
-      .createQueryBuilder('album')
-      .withDeleted()
-      .where('album.id = :id', { id })
-      .getOne()
-  }
-}
