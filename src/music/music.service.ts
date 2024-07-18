@@ -26,7 +26,4 @@ export class MusicService {
     return await this.MusicRepository.remove(id)
   }
 
-  async search (query: string) {
-    
-  }
 }
