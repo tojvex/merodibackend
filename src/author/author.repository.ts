@@ -67,4 +67,12 @@ export class AuthorRepository {
             .getOne()
 
     }
+
+    async search(query: string){
+        return this.AuthorRepository
+        .createQueryBuilder('author')
+        .where('author.firstName LIKE :query', {query: `%${query}%`})
+        .orWhere('author.lastName LIKE :query', {query: `%${query}%`})
+        .getMany()
+      }
 }
