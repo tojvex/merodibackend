@@ -1,5 +1,6 @@
 import { AlbumEntity } from "src/album/entities/album.entity";
 import { AuthorEntity } from "src/author/entities/author.entity";
+import { UserEntity } from "src/user/entities/user.entity";
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
@@ -10,10 +11,8 @@ export class MusicEntity {
     @Column({type: 'varchar'})
     name: string;
 
-
     @Column()
     duration: number;
-
 
     @Column({nullable: true})
     albumId: number
@@ -24,6 +23,8 @@ export class MusicEntity {
     @ManyToMany( () => AuthorEntity, (authors) => authors.musics)
     authors: AuthorEntity[]
 
+    @ManyToOne(() => UserEntity, (user) => user.musics)
+    user: UserEntity;
 
     @CreateDateColumn()
     createdAt: Date;
@@ -32,9 +33,5 @@ export class MusicEntity {
     updatedAt: Date;
 
     @DeleteDateColumn()
-    deletedAt: Date;
-
-
-
-    
+    deletedAt: Date; 
 }
