@@ -23,9 +23,6 @@ export class MusicEntity {
     @ManyToMany( () => AuthorEntity, (authors) => authors.musics)
     authors: AuthorEntity[]
 
-    @ManyToOne(() => UserEntity, (user) => user.musics)
-    user: UserEntity;
-
     @CreateDateColumn()
     createdAt: Date;
 

@@ -21,9 +21,6 @@ export class AlbumEntity {
     @ManyToMany(() => AuthorEntity, (authors) => authors.albums)
     authors: AuthorEntity[]
 
-    @ManyToOne(() => UserEntity, (user) => user.albums)
-    user: UserEntity;
-
     @CreateDateColumn()
     createdAt: Date
 
