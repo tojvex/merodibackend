@@ -18,7 +18,6 @@ export class AlbumRepository {
       .insert()
       .values(createalbumDto)
       .execute()
-
     return album.generatedMaps[0]
   }
 
@@ -26,8 +25,6 @@ export class AlbumRepository {
     return await this.AlbumRepository
       .createQueryBuilder()
       .getMany()
-
-
   }
 
   async findOne(id: number) {

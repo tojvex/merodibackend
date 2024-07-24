@@ -19,7 +19,6 @@ export class MusicRepository {
       .execute()
 
     return music.generatedMaps[0]
-
   }
 
   async findAll() {
@@ -27,8 +26,6 @@ export class MusicRepository {
       .createQueryBuilder('music')
       .leftJoinAndSelect('music.album', 'album')
       .getMany()
-
-
   }
 
   async findOne(id: number) {
@@ -36,7 +33,6 @@ export class MusicRepository {
       .createQueryBuilder('music')
       .where('music.id = :id', { id })
       .getOne()
-
   }
 
   async update(id: number, updateMusicDto: UpdateMusicDto) {
@@ -47,7 +43,6 @@ export class MusicRepository {
       .execute()
 
     return this.MusicRepository.findOneBy({ id })
-
   }
 
   async remove(id: number) {
