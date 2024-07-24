@@ -23,7 +23,7 @@ import { UserModule } from './user/user.module';
     MusicModule,
     AlbumModule,
     AuthorModule,
-    UserModule,
+    SearchModule,
   ],
   controllers: [AppController],
   providers: [AppService],

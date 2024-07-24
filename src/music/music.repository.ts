@@ -4,6 +4,7 @@ import { UpdateMusicDto } from './dto/update-music.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MusicEntity } from './entities/music.entity';
 import { Repository } from 'typeorm';
+import { CreateSearchDto } from 'src/search/dto/create-search.dto';
 
 @Injectable()
 export class MusicRepository {
@@ -57,5 +58,12 @@ export class MusicRepository {
       .withDeleted()
       .where('music.id = :id', { id })
       .execute()
+  }
+
+  async search(query: string){
+    return this.MusicRepository
+    .createQueryBuilder('music')
+    .where('music.name LIKE :query', {query: `%${query}%`})
+    .getMany()
   }
 }

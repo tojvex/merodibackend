@@ -60,4 +60,11 @@ export class AlbumRepository {
       .where('album.id = :id', { id })
       .getOne()
   }
+
+  async search(query: string){
+    return this.AlbumRepository
+    .createQueryBuilder('album')
+    .where('album.title LIKE :query', {query: `%${query}%`})
+    .getMany()
+  }
 }
