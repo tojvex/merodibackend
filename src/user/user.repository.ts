@@ -38,8 +38,10 @@ export class UserRepository {
 
     async update(id: number, updateUserDto: UpdateUserDto) {
 
-        const hashedPassword = await bcrypt.hash(updateUserDto.password, 10)
-        if(updateUserDto.password) updateUserDto.password = hashedPassword
+        if (updateUserDto.password) {
+            const hashedPassword = await bcrypt.hash(updateUserDto.password, 10);
+            updateUserDto.password = hashedPassword;
+        }
 
         await this.userRepository
             .createQueryBuilder('user_entity')
@@ -48,7 +50,7 @@ export class UserRepository {
             .where('user_entity.id = :id', { id })
             .execute()
 
-        return await this.userRepository.update(id, updateUserDto);
+        return await this.userRepository.findOneBy({id})
     }
 
     async remove(id: number) {

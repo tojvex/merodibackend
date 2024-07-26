@@ -6,6 +6,7 @@ import { MusicModule } from './music/music.module';
 import { AlbumModule } from './album/album.module';
 import { AuthorModule } from './author/author.module';
 import { UserModule } from './user/user.module';
+import { SearchModule } from './search/search.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { UserModule } from './user/user.module';
     AlbumModule,
     AuthorModule,
     SearchModule,
+    UserModule
   ],
   controllers: [AppController],
   providers: [AppService],
