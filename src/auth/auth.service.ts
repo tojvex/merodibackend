@@ -1,6 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { LoginUserDto } from './dto/create-login.dto';
-import { UpdateAuthDto } from './dto/login-user-update.dto';
 import { UserRepository } from 'src/user/user.repository';
 import * as bcrypt from 'bcrypt';
 
@@ -22,12 +21,11 @@ export class AuthService {
     )
     
     if(!isPasswordCorrect){
-      throw new UnauthorizedException('Access Denied  ')
+      throw new UnauthorizedException('Access Denied')
     }
 
-    else return rest
-  }
-
+    return rest
   
+  }
 
 }
