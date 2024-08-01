@@ -6,6 +6,7 @@ import { MusicModule } from './music/music.module';
 import { AlbumModule } from './album/album.module';
 import { AuthorModule } from './author/author.module';
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -14,8 +15,8 @@ import { UserModule } from './user/user.module';
       host: '127.0.0.1',
       port: 3306,
       username: 'root',
-      password: '',
-      database: 'Music',
+      password: 'Tornike123',
+      database: 'merodi',
       autoLoadEntities: true,
       synchronize: true,
 
@@ -24,6 +25,7 @@ import { UserModule } from './user/user.module';
     AlbumModule,
     AuthorModule,
     UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

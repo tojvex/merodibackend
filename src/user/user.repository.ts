@@ -20,7 +20,9 @@ export class UserRepository {
         const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
         newUser.password = hashedPassword;
 
-        return await this.userRepository.save(newUser)
+        const {password, ...rest} = newUser
+         await this.userRepository.save(newUser)
+         return rest
     }
 
     async findAll() {
@@ -59,5 +61,12 @@ export class UserRepository {
             .withDeleted()
             .where('user_entity.id = :id', { id })
             .getOne()
+    }
+
+    async findOneByEmail(email: string) {
+        const user = await this.userRepository.findOne({where: {email: email}})
+
+        return user
+
     }
 }
