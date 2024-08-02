@@ -17,14 +17,6 @@ export class UserEntity {
     @Column({length: 255 })
     password: string;
 
-    // @BeforeInsert()
-    // @BeforeUpdate()
-    // async hashPassword() {
-    //     if (this.password) {
-    //         this.password = await bcrypt.hash(this.password, 10);
-    //     }
-    // }
-
     @CreateDateColumn()
     createdAt: Date;
 

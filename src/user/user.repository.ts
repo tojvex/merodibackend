@@ -13,13 +13,10 @@ export class UserRepository {
     private readonly userRepository: Repository<UserEntity>) { }
 
     async create(createUserDto: CreateUserDto) {
-        const newUser = new UserEntity()
-        newUser.email = createUserDto.email;
-        newUser.name = createUserDto.name;
-
+        const newUser = this.userRepository.create(createUserDto)
         const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
         newUser.password = hashedPassword;
-
+        
         return await this.userRepository.save(newUser)
     }
 
