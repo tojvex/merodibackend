@@ -12,9 +12,9 @@ import { AuthModule } from './auth/auth.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: '127.0.0.1',
+      host: 'merodi-back.c5s2840qi9qp.eu-north-1.rds.amazonaws.com',
       port: 3306,
-      username: 'root',
+      username: 'admin',
       password: 'Tornike123',
       database: 'merodi',
       autoLoadEntities: true,
