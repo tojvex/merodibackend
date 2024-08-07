@@ -18,6 +18,9 @@ export class AuthorEntity {
     @Column({ type: 'longtext' })
     biography: string
 
+    @Column()
+    imageUrl: string
+
     @ManyToMany(() => MusicEntity, (musics) => musics.authors)
     @JoinTable()
     musics: MusicEntity[]
