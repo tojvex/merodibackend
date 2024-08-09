@@ -45,7 +45,9 @@ export class AlbumRepository {
 
   async findAll() {
     return await this.AlbumRepository
-      .createQueryBuilder()
+      .createQueryBuilder('album')
+      .leftJoinAndSelect('album.musics', 'music')
+      .leftJoinAndSelect('album.authors', 'author')
       .getMany()
   }
 
@@ -53,6 +55,8 @@ export class AlbumRepository {
     return await this.AlbumRepository
       .createQueryBuilder('album')
       .where('album.id = :id', { id })
+      .leftJoinAndSelect('album.musics', 'music')
+      .leftJoinAndSelect('album.authors', 'author')
       .getOne()
 
   }
