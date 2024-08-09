@@ -1,4 +1,4 @@
-import { IsDecimal, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsArray, IsDecimal, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class CreateMusicDto {
 
@@ -12,4 +12,9 @@ export class CreateMusicDto {
     @IsOptional()
     @IsNumber()
     albumId: number
+
+    @IsOptional()
+    @IsArray()
+    authors: Number[]
+
 }

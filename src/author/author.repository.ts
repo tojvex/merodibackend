@@ -1,24 +1,45 @@
-import { Injectable } from "@nestjs/common";
+import { forwardRef, Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { AuthorEntity } from "./entities/author.entity";
 import { Repository } from "typeorm";
 import { CreateAuthorDto } from "./dto/create-author.dto";
 import { UpdateAuthorDto } from "./dto/update-author.dto";
+import { AlbumRepository } from "src/album/album.repository";
+import { MusicRepository } from "src/music/music.repository";
 
 @Injectable()
 export class AuthorRepository {
     constructor(@InjectRepository(AuthorEntity)
-    private AuthorRepository: Repository<AuthorEntity>) { }
+    private AuthorRepository: Repository<AuthorEntity>,
+        private readonly albumRepo: AlbumRepository,
+        @Inject(forwardRef(() => MusicRepository))
+        private readonly musicRepo: MusicRepository) { }
 
     async create(createAuthorDto: CreateAuthorDto) {
+        const author = new AuthorEntity
+        author.firstName = createAuthorDto.firstName
+        author.lastName = createAuthorDto.lastName
+        author.biography = createAuthorDto.biography
+        author.imageUrl = createAuthorDto.imageUrl
 
-        const author = await this.AuthorRepository
-            .createQueryBuilder()
-            .insert()
-            .values(createAuthorDto)
-            .execute()
+        const albums = []
+        const musics = []
 
-        return author.generatedMaps[0]
+        for (let i = 0; i < createAuthorDto.albums.length; i++) {
+            const album = await this.albumRepo.findOne(+createAuthorDto.albums[i])
+            albums.push(album)
+        }
+
+        for (let i = 0; i < createAuthorDto.musics.length; i++) {
+
+            const music = await this.musicRepo.findOne(+createAuthorDto.musics[i])
+            musics.push(music)
+        }
+
+        author.albums = albums
+        author.musics = musics
+
+        return await this.AuthorRepository.save(author)
     }
 
     async findAll() {
@@ -33,24 +54,51 @@ export class AuthorRepository {
         return await this.AuthorRepository
             .createQueryBuilder('author')
             .where('author.id = :id', { id })
+            .leftJoinAndSelect('author.musics', 'music')
+            .leftJoinAndSelect('author.albums', 'albums')
             .getOne()
 
     }
 
     async update(id: number, updateAuthorDto: UpdateAuthorDto) {
-        await this.AuthorRepository
-            .createQueryBuilder()
-            .update()
-            .set(updateAuthorDto)
-            .where('id = :id', { id })
-            .execute()
+        const author = await this.AuthorRepository.findOne({ where: { id } });
+        if (!author) {
+            throw new NotFoundException(`Author with ID ${id} not found`);
+        }
 
-        return await this.AuthorRepository
-            .createQueryBuilder()
-            .where('id = :id', { id })
-            .getOne()
+        author.firstName = updateAuthorDto.firstName || author.firstName;
+        author.lastName = updateAuthorDto.lastName || author.lastName;
+        author.biography = updateAuthorDto.biography || author.biography;
+        author.imageUrl = updateAuthorDto.imageUrl || author.imageUrl;
 
+        
+        if (updateAuthorDto.albums) {
+            const albums = [];
+            for (let i = 0; i < updateAuthorDto.albums.length; i++) {
+                const album = await this.albumRepo.findOne(+updateAuthorDto.albums[i]);
+                if (album) {
+                    albums.push(album);
+                }
+            }
+            author.albums = albums;
+        }
+
+        
+        if (updateAuthorDto.musics) {
+            const musics = [];
+            for (let i = 0; i < updateAuthorDto.musics.length; i++) {
+                const music = await this.musicRepo.findOne(+updateAuthorDto.musics[i]);
+                if (music) {
+                    musics.push(music);
+                }
+            }
+            author.musics = musics;
+        }
+
+        
+        return await this.AuthorRepository.save(author);
     }
+
 
     async remove(id: number) {
         await this.AuthorRepository
@@ -68,11 +116,11 @@ export class AuthorRepository {
 
     }
 
-    async search(query: string){
+    async search(query: string) {
         return this.AuthorRepository
-        .createQueryBuilder('author')
-        .where('author.firstName LIKE :query', {query: `%${query}%`})
-        .orWhere('author.lastName LIKE :query', {query: `%${query}%`})
-        .getMany()
-      }
+            .createQueryBuilder('author')
+            .where('author.firstName LIKE :query', { query: `%${query}%` })
+            .orWhere('author.lastName LIKE :query', { query: `%${query}%` })
+            .getMany()
+    }
 }

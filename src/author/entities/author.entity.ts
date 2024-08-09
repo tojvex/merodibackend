@@ -18,7 +18,7 @@ export class AuthorEntity {
     @Column({ type: 'longtext' })
     biography: string
 
-    @Column()
+    @Column({ nullable: true})
     imageUrl: string
 
     @ManyToMany(() => MusicEntity, (musics) => musics.authors)

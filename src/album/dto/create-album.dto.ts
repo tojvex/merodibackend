@@ -1,4 +1,4 @@
-import { IsString } from "class-validator";
+import { IsArray, IsOptional, IsString } from "class-validator";
 
 export class CreateAlbumDto {
     @IsString()
@@ -6,4 +6,12 @@ export class CreateAlbumDto {
 
     @IsString()
     releaseDate: string
+
+    @IsOptional()
+    @IsArray()
+    musics: Number[]
+
+    @IsOptional()
+    @IsArray()
+    authors: Number[]
 }
