@@ -24,16 +24,19 @@ export class AuthorRepository {
 
         const albums = []
         const musics = []
-
-        for (let i = 0; i < createAuthorDto.albums.length; i++) {
-            const album = await this.albumRepo.findOne(+createAuthorDto.albums[i])
-            albums.push(album)
+        if (createAuthorDto.albums && createAuthorDto.albums.length > 0) {
+            for (let i = 0; i < createAuthorDto.albums.length; i++) {
+                const album = await this.albumRepo.findOne(+createAuthorDto.albums[i])
+                albums.push(album)
+            }
         }
 
-        for (let i = 0; i < createAuthorDto.musics.length; i++) {
+        if (createAuthorDto.musics && createAuthorDto.musics.length > 0) {
+            for (let i = 0; i < createAuthorDto.musics.length; i++) {
 
-            const music = await this.musicRepo.findOne(+createAuthorDto.musics[i])
-            musics.push(music)
+                const music = await this.musicRepo.findOne(+createAuthorDto.musics[i])
+                musics.push(music)
+            }
         }
 
         author.albums = albums
@@ -71,7 +74,7 @@ export class AuthorRepository {
         author.biography = updateAuthorDto.biography || author.biography;
         author.imageUrl = updateAuthorDto.imageUrl || author.imageUrl;
 
-        
+
         if (updateAuthorDto.albums) {
             const albums = [];
             for (let i = 0; i < updateAuthorDto.albums.length; i++) {
@@ -83,7 +86,7 @@ export class AuthorRepository {
             author.albums = albums;
         }
 
-        
+
         if (updateAuthorDto.musics) {
             const musics = [];
             for (let i = 0; i < updateAuthorDto.musics.length; i++) {
@@ -95,7 +98,7 @@ export class AuthorRepository {
             author.musics = musics;
         }
 
-        
+
         return await this.AuthorRepository.save(author);
     }
 

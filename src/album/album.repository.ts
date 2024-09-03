@@ -26,18 +26,21 @@ export class AlbumRepository {
     const musics = []
     const authors = []
 
-    for (let i = 0; i < createalbumDto.musics.length; i++) {
-      const music =  await this.musicRepo.findOne(+createalbumDto.musics[i])
-      musics.push(music)
+    if (createalbumDto.musics && createalbumDto.musics.length > 0) {
+      for (let i = 0; i < createalbumDto.musics.length; i++) {
+        const music = await this.musicRepo.findOne(+createalbumDto.musics[i])
+        musics.push(music)
+      }
     }
-
     album.musics = musics
 
-    for (let i = 0; i < createalbumDto.authors.length; i++) {
-      const author = await this.authorRepo.findOne(+createalbumDto.authors[i])
-      authors.push(author)
-    }
 
+    if (createalbumDto.authors && createalbumDto.authors.length > 0) {
+      for (let i = 0; i < createalbumDto.authors.length; i++) {
+        const author = await this.authorRepo.findOne(+createalbumDto.authors[i])
+        authors.push(author)
+      }
+    }
     album.authors = authors
 
     return await this.AlbumRepository.save(album)
@@ -65,36 +68,36 @@ export class AlbumRepository {
 
     const album = await this.AlbumRepository.findOne({ where: { id } });
     if (!album) {
-        throw new NotFoundException(`Album with ID ${id} not found`);
+      throw new NotFoundException(`Album with ID ${id} not found`);
     }
 
     album.title = updateAlbumDto.title || album.title;
     album.releaseDate = updateAlbumDto.releaseDate || album.releaseDate;
 
     if (updateAlbumDto.musics) {
-        const musics = [];
-        for (let i = 0; i < updateAlbumDto.musics.length; i++) {
-            const music = await this.musicRepo.findOne(+updateAlbumDto.musics[i]);
-            if (music) {
-                musics.push(music);
-            }
+      const musics = [];
+      for (let i = 0; i < updateAlbumDto.musics.length; i++) {
+        const music = await this.musicRepo.findOne(+updateAlbumDto.musics[i]);
+        if (music) {
+          musics.push(music);
         }
-        album.musics = musics;
+      }
+      album.musics = musics;
     }
 
-   
+
     if (updateAlbumDto.authors) {
-        const authors = [];
-        for (let i = 0; i < updateAlbumDto.authors.length; i++) {
-            const author = await this.authorRepo.findOne(+updateAlbumDto.authors[i]);
-            if (author) {
-                authors.push(author);
-            }
+      const authors = [];
+      for (let i = 0; i < updateAlbumDto.authors.length; i++) {
+        const author = await this.authorRepo.findOne(+updateAlbumDto.authors[i]);
+        if (author) {
+          authors.push(author);
         }
-        album.authors = authors;
+      }
+      album.authors = authors;
     }
     return await this.AlbumRepository.save(album);
-}
+  }
 
 
   async remove(id: number) {
