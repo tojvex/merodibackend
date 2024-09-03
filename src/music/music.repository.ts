@@ -17,6 +17,7 @@ export class MusicRepository {
     const authorArr = []
     newMusic.name = createMusicDto.name
     newMusic.duration = createMusicDto.duration
+    newMusic.imageUrl = createMusicDto.imageUrl
 
 
     if (createMusicDto.authors && createMusicDto.authors.length > 0) {

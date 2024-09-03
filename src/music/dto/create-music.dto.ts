@@ -1,4 +1,4 @@
-import { IsArray, IsDecimal, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsArray, IsDecimal, IsNumber, IsOptional, IsString, IsUrl } from "class-validator";
 
 export class CreateMusicDto {
 
@@ -8,6 +8,9 @@ export class CreateMusicDto {
 
     @IsNumber()
     duration: number
+
+    @IsUrl()
+    imageUrl: string
 
     @IsOptional()
     @IsNumber()
