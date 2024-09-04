@@ -1,7 +1,5 @@
-import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { AuthorEntity } from "src/author/entities/author.entity";
-import { MusicEntity } from "src/music/entities/music.entity";
-import { AlbumEntity } from "src/album/entities/album.entity";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { PlaylistEntity } from "src/playlist/entities/playlist.entity";
 
 @Entity()
 export class UserEntity {
@@ -16,6 +14,9 @@ export class UserEntity {
 
     @Column({length: 255 })
     password: string;
+
+    @OneToMany(() => PlaylistEntity, (playlist) => playlist.user)
+    playlist: PlaylistEntity[];
 
     @CreateDateColumn()
     createdAt: Date;
