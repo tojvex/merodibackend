@@ -9,6 +9,11 @@ async function bootstrap() {
     whitelist: true,
     transform: true,
   }))
+  app.enableCors({
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: '*',
+  });
   await app.listen(3000);
 }
 bootstrap();

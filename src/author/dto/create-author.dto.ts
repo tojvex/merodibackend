@@ -1,4 +1,4 @@
-import { IsNumber, IsOptional, IsString } from "class-validator";
+import { IsArray, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class CreateAuthorDto {
 
@@ -10,6 +10,18 @@ export class CreateAuthorDto {
 
     @IsString()
     biography: string
+
+    @IsOptional()
+    @IsString()
+    imageUrl: string
+
+    @IsOptional()
+    @IsArray()
+    musics: Number[]
+
+    @IsOptional()
+    @IsArray()
+    albums: Number[]
 
 
 }
