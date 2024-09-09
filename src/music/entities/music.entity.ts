@@ -15,17 +15,17 @@ export class MusicEntity {
     duration: number;
 
     @Column({nullable: true})
-    albumId: number
+    albumId: number;
 
     @ManyToOne(() => AlbumEntity, (album) => album.musics)
-    album: AlbumEntity
+    album: AlbumEntity;
 
-    @ManyToMany( () => AuthorEntity, (authors) => authors.musics)
-    authors: AuthorEntity[]
+    @ManyToOne( () => AuthorEntity, (authors) => authors.musics)
+    authors: AuthorEntity;
 
     @ManyToMany(() => PlaylistEntity, (playlist) => playlist.musics )
     @JoinTable({name: "music_playlist"})
-    playlist: PlaylistEntity[]
+    playlist: PlaylistEntity[];
 
     @CreateDateColumn()
     createdAt: Date;

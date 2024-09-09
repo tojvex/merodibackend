@@ -20,8 +20,8 @@ export class PlaylistEntity {
     @ManyToOne(() => AuthorEntity, author => author.playlist)
     author: AuthorEntity;
 
-    @ManyToOne(() => UserEntity, user => user.playlist)
-    user: UserEntity;
+    @ManyToMany(() => UserEntity, user => user.playlist)
+    user: UserEntity[];
 
     @ManyToMany(() => MusicEntity, music => music.playlist , {cascade: true})
     musics: MusicEntity[];
