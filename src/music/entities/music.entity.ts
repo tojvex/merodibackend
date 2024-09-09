@@ -13,6 +13,9 @@ export class MusicEntity {
 
     @Column({nullable: true})
     duration: number;
+    
+    @Column({nullable: true})
+    imageUrl: string;
 
     @Column({nullable: true})
     albumId: number;

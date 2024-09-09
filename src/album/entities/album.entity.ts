@@ -15,6 +15,9 @@ export class AlbumEntity {
     @Column()
     releaseDate: string
 
+    @Column({nullable: true})
+    imageUrl: string
+
     @OneToMany(() => MusicEntity, (musics) => musics.album)
     musics: MusicEntity[]
 

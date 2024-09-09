@@ -30,6 +30,8 @@ export class UserRepository {
     async findAll() {
         return await this.userRepository
             .createQueryBuilder('user_entity')
+            .select(['user_entity.id', 'user_entity.name', 'user_entity.email', 'user_entity.createdAt',
+                    'user_entity.updatedAt'])
             .getMany()
     }
 
@@ -37,6 +39,8 @@ export class UserRepository {
         return await this.userRepository
             .createQueryBuilder('user_entity')
             .where('user_entity.id = :id', { id })
+            .select(['user_entity.id', 'user_entity.name', 'user_entity.email','user_entity.createdAt',
+                    'user_entity.updatedAt'])
             .getOne()
     }
 
@@ -64,6 +68,7 @@ export class UserRepository {
             .createQueryBuilder('user_entity')
             .withDeleted()
             .where('user_entity.id = :id', { id })
+            .select(['user_entity.id', 'user_entity.name', 'user_entity.email'])
             .getOne()
     }
 

@@ -18,8 +18,17 @@ export class AuthorEntity {
     @Column({ type: 'longtext' })
     biography: string
 
+  
     @OneToMany(() => MusicEntity, (musics) => musics.authors)
     musics: MusicEntity
+  
+    @Column({ nullable: true})
+    imageUrl: string
+
+    @ManyToMany(() => MusicEntity, (musics) => musics.authors)
+    @JoinTable()
+    musics: MusicEntity[]
+  
 
     @ManyToMany(() => AlbumEntity, (albums) => albums.authors)
     @JoinTable({name: "album_author"})
