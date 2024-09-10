@@ -24,7 +24,7 @@ export class MusicEntity {
     album: AlbumEntity;
 
     @ManyToOne( () => AuthorEntity, (authors) => authors.musics)
-    authors: AuthorEntity;
+    authors: AuthorEntity[];
 
     @ManyToMany(() => PlaylistEntity, (playlist) => playlist.musics )
     @JoinTable({name: "music_playlist"})

@@ -11,7 +11,7 @@ import { AuthorRepository } from 'src/author/author.repository';
 export class MusicRepository {
   constructor(@InjectRepository(MusicEntity)
   private MusicRepository: Repository<MusicEntity>,
-    private readonly authorRepo: AuthorRepository) { }
+  private readonly authorRepo: AuthorRepository) { }
   async create(createMusicDto: CreateMusicDto) {
     const newMusic = new MusicEntity
     const authorArr = []

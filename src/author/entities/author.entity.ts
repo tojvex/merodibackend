@@ -19,8 +19,6 @@ export class AuthorEntity {
     biography: string
 
   
-    @OneToMany(() => MusicEntity, (musics) => musics.authors)
-    musics: MusicEntity
   
     @Column({ nullable: true})
     imageUrl: string
