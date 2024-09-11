@@ -17,9 +17,6 @@ export class UserRepository {
         const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
         newUser.password = hashedPassword;
 
-        
-        return await this.userRepository.save(newUser)
-
 
         const {password, ...rest} = newUser
          await this.userRepository.save(newUser)
@@ -30,7 +27,7 @@ export class UserRepository {
     async findAll() {
         return await this.userRepository
             .createQueryBuilder('user_entity')
-            .select(['user_entity.id', 'user_entity.name', 'user_entity.email', 'user_entity.createdAt',
+            .select(['user_entity.id', 'user_entity.name', 'user_entity.email', 'user_entity.role', 'user_entity.createdAt',
                     'user_entity.updatedAt'])
             .getMany()
     }

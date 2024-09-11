@@ -13,8 +13,8 @@ export class CreatePlaylistDto {
     @IsUrl()
     image: string;
 
-    @IsUUID()
-    userId: string;
+    @IsNumber()
+    userId: number;
 
     @IsArray()
     @IsNumber({}, {each: true })

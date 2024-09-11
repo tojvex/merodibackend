@@ -30,9 +30,10 @@ export class PlaylistRepository {
         return await this.playlistRepository
             .createQueryBuilder('playlist_entity')
             .where('playlist_entity.id = :id', { id })
+            .leftJoinAndSelect('playlist_entity.musics', 'musics')
             .getOne()
     }
-
+    
     async update(id: number, data: UpdatePlaylistDto) {
         const { musicIds, ...columns } = data
 
