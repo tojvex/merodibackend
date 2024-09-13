@@ -7,9 +7,6 @@ export class UserEntity {
     id: number;
 
     @Column({length: 255})
-    name: string;
-
-    @Column({length: 255})
     email: string;
 
     @Column({length: 255 })
