@@ -1,4 +1,5 @@
-import { IsEmail, IsNotEmpty, IsString, Length, Matches} from "class-validator";
+import { IsEmail, IsEnum, IsNotEmpty, IsString, Length, Matches} from "class-validator";
+import { RoleEnum } from "src/auth/enums/roles.enums";
 
 export class CreateUserDto {
     @Length(3, 255)
@@ -14,4 +15,7 @@ export class CreateUserDto {
         message: 'Password too weak',
     })
     password: string;
+
+    @IsString()
+    role: RoleEnum;
 }

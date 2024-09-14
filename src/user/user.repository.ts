@@ -27,12 +27,13 @@ export class UserRepository {
             }
             throw new Error('Registration failed')
         }
+
     }
 
     async findAll() {
         return await this.userRepository
             .createQueryBuilder('user_entity')
-            .select(['user_entity.id', 'user_entity.name', 'user_entity.email', 'user_entity.createdAt',
+            .select(['user_entity.id', 'user_entity.name', 'user_entity.email', 'user_entity.role', 'user_entity.createdAt',
                     'user_entity.updatedAt'])
             .getMany()
     }
