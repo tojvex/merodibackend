@@ -17,10 +17,16 @@ export class UserRepository {
         const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
         newUser.password = hashedPassword;
 
-
-        const {password, ...rest} = newUser
-         await this.userRepository.save(newUser)
-         return rest
+        try {
+            const result = await this.userRepository.save(newUser)
+            const { password, ...UserEntity} = result
+            return UserEntity
+        } catch(err) {
+            if(err.errno == 1062) {
+                return 'Email is already in use'
+            }
+            throw new Error('Registration failed')
+        }
 
     }
 

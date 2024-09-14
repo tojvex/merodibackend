@@ -2,11 +2,6 @@ import { IsEmail, IsEnum, IsNotEmpty, IsString, Length, Matches} from "class-val
 import { RoleEnum } from "src/auth/enums/roles.enums";
 
 export class CreateUserDto {
-    @IsString()
-    @IsNotEmpty()
-    @Length(2, 255)
-    name: string;
-
     @Length(3, 255)
     @IsNotEmpty()
     @IsString()

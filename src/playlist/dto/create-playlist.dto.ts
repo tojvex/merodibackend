@@ -3,7 +3,7 @@ import { IsArray, IsNumber, IsOptional, IsString, IsUUID, IsUrl, MaxLength } fro
 export class CreatePlaylistDto {
     @IsString()
     @MaxLength(30)
-    name: string;
+    title: string;
 
     @IsOptional()
     @IsString()

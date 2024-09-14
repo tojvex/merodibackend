@@ -9,7 +9,7 @@ export class PlaylistEntity {
     id: number;
 
     @Column({ length: 50 })
-    name: string;
+    title: string;
 
     @Column({ length: 255 , nullable: true})
     description: string;
