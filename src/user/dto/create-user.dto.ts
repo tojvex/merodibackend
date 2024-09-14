@@ -21,5 +21,5 @@ export class CreateUserDto {
     password: string;
 
     @IsString()
-    role: RoleEnum;
+    role: RoleEnum = RoleEnum.user;
 }
