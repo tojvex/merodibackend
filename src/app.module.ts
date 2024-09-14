@@ -10,6 +10,7 @@ import { SearchModule } from './search/search.module';
 import { AuthModule } from './auth/auth.module';
 import { PlaylistModule } from './playlist/playlist.module';
 import { ConfigModule } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -24,6 +25,10 @@ import { ConfigModule } from '@nestjs/config';
       autoLoadEntities: true,
       synchronize: true,
 
+    }),
+    JwtModule.register({
+      secret: process.env.JWT_PASSOWRD,
+      global: true
     }),
     MusicModule,
     AlbumModule,

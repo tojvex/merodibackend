@@ -27,6 +27,7 @@ export class UserRepository {
             }
             throw new Error('Registration failed')
         }
+
     }
 
     async findAll() {

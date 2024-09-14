@@ -2,14 +2,16 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { LoginUserDto } from './dto/create-login.dto';
 import { UserRepository } from 'src/user/user.repository';
 import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly usersRepo: UserRepository) {}
+  constructor(private readonly usersRepo: UserRepository,
+              private readonly jwtService: JwtService) {}
   
   async login(data: LoginUserDto) {
     const user  = await this.usersRepo.findOneByEmail(data.email)
-    const {password, ...rest} = user
+    
 
     if(!user) {
       throw new UnauthorizedException('Access Denied')
@@ -17,14 +19,22 @@ export class AuthService {
 
     const isPasswordCorrect = await bcrypt.compare(
       data.password, 
-      password
+      user.password
     )
     
     if(!isPasswordCorrect){
       throw new UnauthorizedException('Access Denied')
     }
 
-    return rest
+    const jwtToken = await this.jwtService.signAsync({
+      userId: user.id,
+      name: user.name,
+      role: user.role
+
+
+    })
+
+    return jwtToken
   
   }
 
