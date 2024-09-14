@@ -13,9 +13,6 @@ export class UserEntity {
     @Column({length: 255 })
     password: string;
 
-    @Column({length: 255, unique: true, nullable: true})
-    name: string
-
     @Column({default: RoleEnum.user, type: 'enum', enum: RoleEnum})
     role: RoleEnum;
 
