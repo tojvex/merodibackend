@@ -23,6 +23,7 @@ export class PlaylistRepository {
     async findAll() {
         return await this.playlistRepository
             .createQueryBuilder('playlist_entity')
+            .leftJoinAndSelect('playlist_entity.musics', 'musics')
             .getMany()
     }
 
