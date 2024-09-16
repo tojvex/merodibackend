@@ -27,7 +27,7 @@ import { JwtModule } from '@nestjs/jwt';
 
     }),
     JwtModule.register({
-      secret: process.env.JWT_PASSOWRD,
+      secret: process.env.JWT_PASSWORD,
       global: true
     }),
     MusicModule,
