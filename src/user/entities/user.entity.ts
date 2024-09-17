@@ -1,6 +1,7 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { PlaylistEntity } from "src/playlist/entities/playlist.entity";
 import { RoleEnum } from "src/auth/enums/roles.enums";
+import { FileEntity } from "src/files/entities/file.entity";
 
 @Entity()
 export class UserEntity {
@@ -15,6 +16,9 @@ export class UserEntity {
 
     @Column({default: RoleEnum.user, type: 'enum', enum: RoleEnum})
     role: RoleEnum;
+
+    @ManyToOne(() => FileEntity, (file) => file.user)
+    file: FileEntity;
 
     @ManyToMany(() => PlaylistEntity, (playlist) => playlist.user)
     @JoinTable()
