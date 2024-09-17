@@ -18,8 +18,6 @@ export class AuthorEntity {
 
     @Column({ type: 'longtext' })
     biography: string
-
-  
   
     @Column({ nullable: true})
     imageUrl: string
