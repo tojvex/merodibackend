@@ -11,6 +11,8 @@ import { AuthModule } from './auth/auth.module';
 import { PlaylistModule } from './playlist/playlist.module';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
+import { FilesModule } from './files/files.module';
+import { AwsModule } from './aws/aws.module';
 
 @Module({
   imports: [
@@ -38,6 +40,8 @@ import { JwtModule } from '@nestjs/jwt';
     UserModule,
     AuthModule,
     PlaylistModule,
+    FilesModule,
+    AwsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
