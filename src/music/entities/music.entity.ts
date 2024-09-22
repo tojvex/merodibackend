@@ -24,7 +24,7 @@ export class MusicEntity {
     @ManyToOne(() => AlbumEntity, (album) => album.musics)
     album: AlbumEntity;
 
-    @OneToMany(() => AuthorEntity, (authors) => authors.musics)
+    @ManyToMany(() => AuthorEntity, (authors) => authors.musics)
     authors: AuthorEntity[];
 
     @ManyToOne(() => FileEntity, (file) => file.musics)
