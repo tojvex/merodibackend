@@ -11,13 +11,13 @@ export class FilesController {
   @Post('/upload')
   @Public()
   @UseInterceptors(FileInterceptor('file'))
-  uploadFile(@UploadedFile() file: Express.Multer.File) {
-    return this.filesService.uploadFile(file)
+  async uploadFile(@UploadedFile() file: Express.Multer.File) {
+    return await this.filesService.uploadFile(file)
   }
 
   @Get(':id')
   @Public()
-  getFile(@Param('id') id: number) {
-    return this.filesService.getFile(id);
+  async getFile(@Param('id') id: number) {
+    return await this.filesService.getFile(id);
   }
 }
