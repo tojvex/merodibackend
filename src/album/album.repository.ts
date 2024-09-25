@@ -74,6 +74,7 @@ export class AlbumRepository {
 
     album.title = updateAlbumDto.title || album.title;
     album.releaseDate = updateAlbumDto.releaseDate || album.releaseDate;
+    album.description = updateAlbumDto.description || album.description
 
     if (updateAlbumDto.musics) {
       const musics = [];
