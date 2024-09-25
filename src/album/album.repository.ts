@@ -23,6 +23,7 @@ export class AlbumRepository {
     album.title = createalbumDto.title
     album.releaseDate = createalbumDto.releaseDate
     album.imageUrl = createalbumDto.imageUrl
+    album.description = createalbumDto.description
 
     const musics = []
     const authors = []
