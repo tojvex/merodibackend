@@ -7,6 +7,9 @@ export class CreateAlbumDto {
     @IsString()
     releaseDate: string
 
+    @IsString()
+    description: string
+
     @IsUrl()
     imageUrl: string
 
