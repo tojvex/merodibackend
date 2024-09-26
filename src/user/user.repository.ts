@@ -11,26 +11,29 @@ import { PlaylistRepository } from 'src/playlist/playlist.repository';
 @Injectable()
 export class UserRepository {
     constructor(@InjectRepository(UserEntity)
-    private readonly playlistRepo: PlaylistRepository,
-        private readonly userRepository: Repository<UserEntity>) { }
+    private readonly userRepository: Repository<UserEntity>,
+    private readonly playlistRepo: PlaylistRepository) { }
 
     async create(createUserDto: CreateUserDto) {
         const newUser = this.userRepository.create(createUserDto)
         const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
         newUser.password = hashedPassword;
 
-
         try {
             const defaultPlaylist = await this.playlistRepo.findOne(1);
 
             if (!defaultPlaylist) {
-                throw new Error('Default playlist not found');
+              throw new Error('Default playlist not found');
             }
-            newUser.playlist = [defaultPlaylist];
+
+           newUser.playlist = [defaultPlaylist];
+
+
             const result = await this.userRepository.save(newUser)
             const { password, ...UserEntity } = result
             return UserEntity
         } catch (err) {
+            
             if (err.errno == 1062) {
                 return 'Email is already in use'
             }
