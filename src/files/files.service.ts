@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { FilesRepository } from './files.repository';
 import { S3Service } from 'src/aws/services/s3.service';
 
@@ -11,7 +11,7 @@ export class FilesService {
   async uploadFile(file: Express.Multer.File) {
     const fileName = file.originalname.split('.').slice(0, -1).join('.')
     const result = await this.s3Service.upload(file, fileName)
-    
+
 
     const savedFile = await this.filesRepository.save(
       fileName,
@@ -21,10 +21,19 @@ export class FilesService {
     )
 
     return savedFile
-}
+  }
 
   async getFile(fileId: number) {
     const file = await this.filesRepository.findOne(fileId)
+    if (!file) {
+      throw new NotFoundException('File not found');
+    }
+
+    const procetcUrl = await this.s3Service.getProtectedLink(
+      file.key,
+      file.bucket
+    )
+    file.url = procetcUrl
 
     return file;
   }

@@ -10,7 +10,7 @@ import { AuthorRepository } from 'src/author/author.repository';
 @Injectable()
 export class MusicRepository {
   constructor(@InjectRepository(MusicEntity)
-  private MusicRepository: Repository<MusicEntity>,
+  private readonly MusicRepository: Repository<MusicEntity>,
   private readonly authorRepo: AuthorRepository) { }
   async create(createMusicDto: CreateMusicDto) {
     const newMusic = new MusicEntity

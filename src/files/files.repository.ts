@@ -21,7 +21,9 @@ export class FilesRepository {
         return await this.filesRepository.save(newFile)
     }
 
-    findOne(id: number) {
-        return this.filesRepository.findOne({where: {id}})
-    } 
+    async findOne(id: number) {
+        return await this.filesRepository.findOne({
+          where: { id },
+        });
+      }      
 }

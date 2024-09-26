@@ -5,12 +5,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { PlaylistRepository } from 'src/playlist/playlist.repository';
 
 
 @Injectable()
 export class UserRepository {
     constructor(@InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>) { }
+    private readonly userRepository: Repository<UserEntity>,
+    private readonly playlistRepo: PlaylistRepository) { }
 
     async create(createUserDto: CreateUserDto) {
         const newUser = this.userRepository.create(createUserDto)
@@ -18,11 +20,21 @@ export class UserRepository {
         newUser.password = hashedPassword;
 
         try {
+            const defaultPlaylist = await this.playlistRepo.findOne(1);
+
+            if (!defaultPlaylist) {
+              throw new Error('Default playlist not found');
+            }
+
+           newUser.playlist = [defaultPlaylist];
+
+
             const result = await this.userRepository.save(newUser)
-            const { password, ...UserEntity} = result
+            const { password, ...UserEntity } = result
             return UserEntity
-        } catch(err) {
-            if(err.errno == 1062) {
+        } catch (err) {
+            
+            if (err.errno == 1062) {
                 return 'Email is already in use'
             }
             throw new Error('Registration failed')
@@ -34,7 +46,7 @@ export class UserRepository {
         return await this.userRepository
             .createQueryBuilder('user_entity')
             .select(['user_entity.id', 'user_entity.email', 'user_entity.createdAt',
-                    'user_entity.updatedAt'])
+                'user_entity.updatedAt'])
             .getMany()
     }
 
@@ -42,8 +54,13 @@ export class UserRepository {
         return await this.userRepository
             .createQueryBuilder('user_entity')
             .where('user_entity.id = :id', { id })
-            .select(['user_entity.id', 'user_entity.email','user_entity.createdAt',
-                    'user_entity.updatedAt'])
+            .select([
+                'user_entity.id',
+                'user_entity.email',
+                'user_entity.createdAt',
+                'user_entity.updatedAt'
+            ])
+            .leftJoinAndSelect('user_entity.playlist', 'playlist')
             .getOne()
     }
 
@@ -61,7 +78,7 @@ export class UserRepository {
             .where('user_entity.id = :id', { id })
             .execute()
 
-        return await this.userRepository.findOneBy({id})
+        return await this.userRepository.findOneBy({ id })
     }
 
     async remove(id: number) {
@@ -71,12 +88,12 @@ export class UserRepository {
             .createQueryBuilder('user_entity')
             .withDeleted()
             .where('user_entity.id = :id', { id })
-            .select(['user_entity.id','user_entity.email'])
+            .select(['user_entity.id', 'user_entity.email'])
             .getOne()
     }
 
     async findOneByEmail(email: string) {
-        const user = await this.userRepository.findOne({where: {email: email}})
+        const user = await this.userRepository.findOne({ where: { email: email } })
 
         return user
 

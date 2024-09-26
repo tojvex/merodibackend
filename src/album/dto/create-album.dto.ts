@@ -13,6 +13,9 @@ export class CreateAlbumDto {
     @IsUrl()
     imageUrl: string
 
+    @IsString()
+    description: string;
+
     @IsOptional()
     @IsArray()
     musics: Number[]
