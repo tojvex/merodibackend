@@ -42,8 +42,13 @@ export class UserRepository {
         return await this.userRepository
             .createQueryBuilder('user_entity')
             .where('user_entity.id = :id', { id })
-            .select(['user_entity.id', 'user_entity.email','user_entity.createdAt',
-                    'user_entity.updatedAt'])
+            .select([
+                'user_entity.id', 
+                'user_entity.email',
+                'user_entity.createdAt',
+                'user_entity.updatedAt'
+            ])
+            .leftJoinAndSelect('user_entity.playlist', 'playlist')
             .getOne()
     }
 
