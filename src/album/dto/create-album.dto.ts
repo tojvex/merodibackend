@@ -7,11 +7,11 @@ export class CreateAlbumDto {
     @IsString()
     releaseDate: string
 
+    @IsString()
+    description: string
+
     @IsUrl()
     imageUrl: string
-
-    @IsString()
-    description: string;
 
     @IsOptional()
     @IsArray()
