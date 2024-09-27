@@ -2,6 +2,7 @@ import { AlbumEntity } from "src/album/entities/album.entity";
 import { AuthorEntity } from "src/author/entities/author.entity";
 import { FileEntity } from "src/files/entities/file.entity";
 import { PlaylistEntity } from "src/playlist/entities/playlist.entity";
+import { StatsEntity } from "src/stats/entities/stat.entity";
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
@@ -34,6 +35,9 @@ export class MusicEntity {
     @JoinTable({name: "music_playlist"})
     playlist: PlaylistEntity[];
 
+    @OneToMany(() => StatsEntity, stats => stats.music)
+    stats: StatsEntity[];
+
     @CreateDateColumn()
     createdAt: Date;
 
@@ -42,5 +46,4 @@ export class MusicEntity {
 
     @DeleteDateColumn()
     deletedAt: Date;
-    newMusic: any[];
 }

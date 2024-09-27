@@ -2,6 +2,7 @@ import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinTable, ManyToMa
 import { PlaylistEntity } from "src/playlist/entities/playlist.entity";
 import { RoleEnum } from "src/auth/enums/roles.enums";
 import { FileEntity } from "src/files/entities/file.entity";
+import { StatsEntity } from "src/stats/entities/stat.entity";
 
 @Entity()
 export class UserEntity {
@@ -23,6 +24,9 @@ export class UserEntity {
     @ManyToMany(() => PlaylistEntity, (playlist) => playlist.user)
     @JoinTable()
     playlist: PlaylistEntity[];
+
+    @OneToMany(() => StatsEntity, stats => stats.user)
+    stats: StatsEntity[];
 
     @CreateDateColumn()
     createdAt: Date;
