@@ -4,14 +4,15 @@ import { UpdateMusicDto } from './dto/update-music.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MusicEntity } from './entities/music.entity';
 import { Repository } from 'typeorm';
-import { CreateSearchDto } from 'src/search/dto/create-search.dto';
 import { AuthorRepository } from 'src/author/author.repository';
 
 @Injectable()
 export class MusicRepository {
   constructor(@InjectRepository(MusicEntity)
   private readonly MusicRepository: Repository<MusicEntity>,
-  private readonly authorRepo: AuthorRepository) { }
+  private readonly authorRepo: AuthorRepository,
+) { }
+
   async create(createMusicDto: CreateMusicDto) {
     const newMusic = new MusicEntity
     const authorArr = []

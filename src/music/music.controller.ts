@@ -1,17 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
 import { MusicService } from './music.service';
 import { CreateMusicDto } from './dto/create-music.dto';
 import { UpdateMusicDto } from './dto/update-music.dto';
-import { Public } from 'src/auth/decorators/public.decorator';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RoleEnum } from 'src/auth/enums/roles.enums';
 import { StatsService } from 'src/stats/stats.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Controller('music')
 export class MusicController {
   constructor(
     private readonly musicService: MusicService,
-    private readonly statsService: StatsService) {}
+    private readonly statsService: StatsService,
+    private readonly jwtService: JwtService
+  ) {}
 
   
   @Roles(RoleEnum.admin, RoleEnum.user)
@@ -28,7 +30,10 @@ export class MusicController {
 
   @Roles(RoleEnum.admin, RoleEnum.user)
   @Get(':id')
-  async findOne(@Param('id') id: string,) {    
+  async findOne(@Param('id') id: string, @Req() req) {  
+    const token = await req.headers.authorization.split('Bearer ')[1]
+    const userId = await this.jwtService.decode(token).userId
+    await this.statsService.recordPlay(+userId, +id)
     return await this.musicService.findOne(+id);
   }
 

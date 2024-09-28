@@ -1,17 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Between } from 'typeorm';
 import { StatsEntity } from './entities/stat.entity';
 import { MusicRepository } from '../music/music.repository';
 import { UserRepository } from '../user/user.repository';
-import { Stats } from 'fs';
 
 @Injectable()
 export class StatsService {
   constructor(
     @InjectRepository(StatsEntity)
     private statsRepository: Repository<StatsEntity>,
-
     private musicRepository: MusicRepository,
     private userRepository: UserRepository
   ) { }
@@ -21,9 +19,8 @@ export class StatsService {
     const music = await this.musicRepository.findOne(musicId);
 
     if (!user || !music) {
-        throw new Error('User or music not found');
+        throw new NotFoundException('User or music not found');
     }
-
     const today = new Date();
     today.setHours(0, 0, 0, 0); 
 
@@ -55,7 +52,7 @@ async countTotalListens(musicId: number){
       .where('stats.musicId = :musicId', { musicId })
       .getRawOne();
 
-  return result.totalListens ? parseInt(result.totalListens, 10) : 0;
+  return result.totalListens ? +result.totalListens : 0;
 }
 
 async getMostPlayedMusics(limit: number){
@@ -66,10 +63,8 @@ async getMostPlayedMusics(limit: number){
       .limit(limit)
       .getRawMany();
 
-  return results.map(result => ({
-      musicId: result.musicId,
-      totalPlays: parseInt(result.totalPlays, 10),
-  }));
+
+      return results
 
 }
 
@@ -85,10 +80,7 @@ async getMostPlayedMusicsToday(limit: number){
       .limit(limit)
       .getRawMany();
 
-  return results.map(result => ({
-      musicId: result.musicId,
-      totalPlays: parseInt(result.totalPlays, 10),
-  }));
+    return results
 }
 
 async getMostPlayedMusicsLastWeek(limit: number){
@@ -104,10 +96,8 @@ async getMostPlayedMusicsLastWeek(limit: number){
       .limit(limit)
       .getRawMany();
 
-  return results.map(result => ({
-      musicId: result.musicId,
-      totalPlays: parseInt(result.totalPlays, 10),
-  }));
+     
+     return results
 }
 
 

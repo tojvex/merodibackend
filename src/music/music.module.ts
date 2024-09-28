@@ -10,8 +10,9 @@ import { StatsModule } from 'src/stats/stats.module';
 @Module({
   imports: [
     TypeOrmModule.forFeature([MusicEntity]),
-   forwardRef( () =>  AuthorModule),
-    StatsModule],
+    forwardRef( () => StatsModule),
+   forwardRef( () =>  AuthorModule)
+  ],
   controllers: [MusicController],
   providers: [MusicService, MusicRepository],
   exports: [MusicRepository]
