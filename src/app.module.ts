@@ -13,6 +13,7 @@ import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { FilesModule } from './files/files.module';
 import { AwsModule } from './aws/aws.module';
+import { StatsModule } from './stats/stats.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { AwsModule } from './aws/aws.module';
     PlaylistModule,
     FilesModule,
     AwsModule,
+    StatsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

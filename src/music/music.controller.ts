@@ -5,10 +5,13 @@ import { UpdateMusicDto } from './dto/update-music.dto';
 import { Public } from 'src/auth/decorators/public.decorator';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RoleEnum } from 'src/auth/enums/roles.enums';
+import { StatsService } from 'src/stats/stats.service';
 
 @Controller('music')
 export class MusicController {
-  constructor(private readonly musicService: MusicService) {}
+  constructor(
+    private readonly musicService: MusicService,
+    private readonly statsService: StatsService) {}
 
   
   @Roles(RoleEnum.admin, RoleEnum.user)
@@ -25,7 +28,7 @@ export class MusicController {
 
   @Roles(RoleEnum.admin, RoleEnum.user)
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string,) {    
     return await this.musicService.findOne(+id);
   }
 
