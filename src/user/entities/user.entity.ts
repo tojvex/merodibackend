@@ -20,7 +20,7 @@ export class UserEntity {
     @ManyToOne(() => FileEntity, (file) => file.user)
     file: FileEntity;
 
-    @ManyToMany(() => PlaylistEntity, (playlist) => playlist.user)
+    @ManyToMany(() => PlaylistEntity, (playlist) => playlist.user, { cascade: true })
     @JoinTable()
     playlist: PlaylistEntity[];
 

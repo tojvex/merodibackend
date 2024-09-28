@@ -6,6 +6,7 @@ import { UserEntity } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { PlaylistRepository } from 'src/playlist/playlist.repository';
+import { PlaylistEntity } from 'src/playlist/entities/playlist.entity';
 
 
 @Injectable()
@@ -27,7 +28,6 @@ export class UserRepository {
             }
 
            newUser.playlist = [defaultPlaylist];
-
 
             const result = await this.userRepository.save(newUser)
             const { password, ...UserEntity } = result
