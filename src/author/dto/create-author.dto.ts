@@ -4,7 +4,8 @@ export class CreateAuthorDto {
 
     @IsString()
     firstName: string
-
+    
+    @IsOptional()
     @IsString()
     lastName: string
 
