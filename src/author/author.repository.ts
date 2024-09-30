@@ -108,13 +108,13 @@ export class AuthorRepository {
             .createQueryBuilder()
             .softDelete()
             .from(AuthorEntity)
-            .where('id', { id })
+            .where('id = :id', { id })
             .execute()
 
         return await this.AuthorRepository
             .createQueryBuilder()
             .withDeleted()
-            .where('id', { id })
+            .where('id = :id', { id })
             .getOne()
 
     }
