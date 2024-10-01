@@ -61,6 +61,7 @@ export class UserRepository {
                 'user_entity.updatedAt'
             ])
             .leftJoinAndSelect('user_entity.playlist', 'playlist')
+            .leftJoinAndSelect('playlist_entity.musics', 'musics')
             .getOne()
     }
 
