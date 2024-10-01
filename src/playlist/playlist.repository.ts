@@ -32,6 +32,8 @@ export class PlaylistRepository {
             .createQueryBuilder('playlist_entity')
             .where('playlist_entity.id = :id', { id })
             .leftJoinAndSelect('playlist_entity.musics', 'musics')
+            .leftJoin('playlist_entity.user', 'user')
+            .addSelect('user.id')
             .getOne()
     }
     
