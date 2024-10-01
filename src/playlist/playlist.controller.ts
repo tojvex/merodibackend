@@ -29,7 +29,7 @@ export class PlaylistController {
     return await this.playlistService.findOne(+id);
   }
 
-  @Roles(RoleEnum.admin)
+  @Roles(RoleEnum.admin, RoleEnum.user)
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updatePlaylistDto: UpdatePlaylistDto) {
     return await this.playlistService.update(+id, updatePlaylistDto);
