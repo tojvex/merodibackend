@@ -25,5 +25,9 @@ export class FilesRepository {
         return await this.filesRepository.findOne({
           where: { id },
         });
-      }      
+      } 
+
+    async findAll(){
+      return await this.filesRepository.find()
+    }
 }

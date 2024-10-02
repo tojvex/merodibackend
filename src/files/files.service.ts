@@ -38,4 +38,8 @@ export class FilesService {
     return file;
   }
 
+  async findAll () {
+    return this.filesRepository.findAll()
+  }
+
 }
