@@ -105,16 +105,16 @@ export class AlbumRepository {
 
   async remove(id: number) {
     await this.AlbumRepository
-      .createQueryBuilder('album')
+      .createQueryBuilder()
       .softDelete()
       .from(AlbumEntity)
-      .where('album.id = :id', { id })
+      .where('id = :id', { id })
       .execute()
 
     return await this.AlbumRepository
       .createQueryBuilder('album')
       .withDeleted()
-      .where('album.id = :id', { id })
+      .where('id = :id', { id })
       .getOne()
   }
 
