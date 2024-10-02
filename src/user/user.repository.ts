@@ -21,28 +21,26 @@ export class UserRepository {
         newUser.password = hashedPassword;
 
         try {
-            // Save the user first
+
             const savedUser = await this.userRepository.save(newUser);
 
-            // Create a new empty playlist for the user using the existing create() method
             const playlistDto: CreatePlaylistDto = {
                 title: 'FavSongs',
                 description: 'Empty Description',
-                userId: savedUser.id, // Set the user ID
-                musicIds: [] // Empty music list
-                ,
+                userId: savedUser.id, 
+                musicIds: [],
                 image: ''
             };
 
-            const newPlaylist = await this.playlistRepo.create(playlistDto); // Use the repository's create method
+            const newPlaylist = await this.playlistRepo.create(playlistDto); 
 
-            // Link the new playlist to the user
+          
             savedUser.playlist = [newPlaylist];
 
-            // Save the user with the playlist linked
             const result = await this.userRepository.save(savedUser);
 
             const { password, ...UserEntity } = result;
+            
             return UserEntity;
         } catch (err) {
             if (err.errno === 1062) {
