@@ -63,6 +63,15 @@ export class AuthorRepository {
 
     }
 
+    async findOneByFirstNameOrLastName(firstName: string, lastName: string) {
+        return await this.AuthorRepository
+            .createQueryBuilder('author')
+            .where('author.firstName = :firstName AND author.lastName = :lastName', { firstName, lastName })
+            .leftJoinAndSelect('author.musics', 'music')
+            .leftJoinAndSelect('author.albums', 'albums')
+            .getMany();
+    }
+
     async update(id: number, updateAuthorDto: UpdateAuthorDto) {
         const author = await this.AuthorRepository.findOne({ where: { id } });
         if (!author) {

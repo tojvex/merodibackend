@@ -17,7 +17,6 @@ export class CreateAlbumDto {
     @IsArray()
     musics: Number[]
 
-    @IsOptional()
     @IsArray()
-    authors: Number[]
+    authors: String[]
 }

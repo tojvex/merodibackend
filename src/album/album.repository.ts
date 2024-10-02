@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AlbumEntity } from './entities/album.entity';
@@ -37,11 +37,17 @@ export class AlbumRepository {
     album.musics = musics
 
 
-    if (createalbumDto.authors && createalbumDto.authors.length > 0) {
+    if (createalbumDto.authors.length) {
       for (let i = 0; i < createalbumDto.authors.length; i++) {
-        const author = await this.authorRepo.findOne(+createalbumDto.authors[i])
+        const firstName = createalbumDto.authors[i].split(' ')[0]
+        const lastName = createalbumDto.authors[i].split(' ')[1]
+        const author = await this.authorRepo.findOneByFirstNameOrLastName(firstName, lastName)
         authors.push(author)
       }
+    }
+
+    if(!authors[0].length){
+      throw new NotFoundException('Author was not found')
     }
     album.authors = authors
 
