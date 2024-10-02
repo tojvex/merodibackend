@@ -36,6 +36,7 @@ export class AlbumRepository {
       for (let i = 0; i < createalbumDto.musics.length; i++) {
         const music = await this.musicRepo.findOne(+createalbumDto.musics[i])
         musics.push(music)
+        console.log(music)
       }
     }
     album.musics = musics
@@ -46,13 +47,14 @@ export class AlbumRepository {
         const firstName = createalbumDto.authors[i].split(' ')[0]
         const lastName = createalbumDto.authors[i].split(' ')[1]
         const author = await this.authorRepo.findOneByFirstNameOrLastName(firstName, lastName)
-        authors.push(author)
+        authors.push(...author)
       }
     }
 
-    if(!authors[0].length){
+    if(!authors.length){
       throw new NotFoundException('Author was not found')
     }
+
     album.authors = authors
 
     return await this.AlbumRepository.save(album)
@@ -108,6 +110,7 @@ export class AlbumRepository {
           authors.push(author);
         }
       }
+      
       album.authors = authors;
     }
     return await this.AlbumRepository.save(album);

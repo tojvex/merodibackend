@@ -12,16 +12,16 @@ export class CreateAuthorDto {
     biography: string
 
     @IsOptional()
-    @IsString()
-    imageUrl: string
+    @IsNumber()
+    imageId: number
 
     @IsOptional()
     @IsArray()
-    musics: Number[]
+    musics: number[]
 
     @IsOptional()
     @IsArray()
-    albums: Number[]
+    albums: number[]
 
 
 }

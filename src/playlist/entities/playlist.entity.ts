@@ -16,7 +16,7 @@ export class PlaylistEntity {
     description: string;
 
     @Column('text')
-    image: string;
+    imageUrl: string;
 
     @ManyToOne(() => AuthorEntity, authors => authors.playlist)
     authors: AuthorEntity;

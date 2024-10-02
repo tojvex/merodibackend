@@ -9,9 +9,10 @@ export class CreatePlaylistDto {
     @IsString()
     description: string;
 
-    @IsString()
-    @IsUrl()
-    image: string;
+    
+    @IsNumber()
+    @IsOptional()
+    imageId: any
 
     @IsNumber()
     userId: number;

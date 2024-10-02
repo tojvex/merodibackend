@@ -6,6 +6,7 @@ import { CreateAuthorDto } from "./dto/create-author.dto";
 import { UpdateAuthorDto } from "./dto/update-author.dto";
 import { AlbumRepository } from "src/album/album.repository";
 import { MusicRepository } from "src/music/music.repository";
+import { FilesService } from "src/files/files.service";
 
 @Injectable()
 export class AuthorRepository {
@@ -13,14 +14,16 @@ export class AuthorRepository {
     private AuthorRepository: Repository<AuthorEntity>,
         private readonly albumRepo: AlbumRepository,
         @Inject(forwardRef(() => MusicRepository))
-        private readonly musicRepo: MusicRepository) { }
+        private readonly musicRepo: MusicRepository,
+        private readonly filesService: FilesService) { }
 
     async create(createAuthorDto: CreateAuthorDto) {
+        const imageUrl = (await this.filesService.getFile(createAuthorDto.imageId)).url
         const author = new AuthorEntity
         author.firstName = createAuthorDto.firstName
         author.lastName = createAuthorDto.lastName
         author.biography = createAuthorDto.biography
-        author.imageUrl = createAuthorDto.imageUrl
+        author.imageUrl = imageUrl
 
         const albums = []
         const musics = []
@@ -77,11 +80,12 @@ export class AuthorRepository {
         if (!author) {
             throw new NotFoundException(`Author with ID ${id} not found`);
         }
+        const imageUrl  = await (await this.filesService.getFile(updateAuthorDto.imageId)).url
 
         author.firstName = updateAuthorDto.firstName || author.firstName;
         author.lastName = updateAuthorDto.lastName || author.lastName;
         author.biography = updateAuthorDto.biography || author.biography;
-        author.imageUrl = updateAuthorDto.imageUrl || author.imageUrl;
+        author.imageUrl =  imageUrl|| author.imageUrl;
 
 
         if (updateAuthorDto.albums) {

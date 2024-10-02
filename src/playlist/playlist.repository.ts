@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PlaylistEntity } from './entities/playlist.entity';
 import { MusicEntity } from 'src/music/entities/music.entity';
+import { FilesService } from 'src/files/files.service';
 
 @Injectable()
 export class PlaylistRepository {
@@ -12,10 +13,13 @@ export class PlaylistRepository {
     constructor(@InjectRepository(PlaylistEntity)
     private readonly playlistRepository: Repository<PlaylistEntity>,
     @InjectRepository(MusicEntity)
-        private readonly musicRepository: Repository<MusicEntity>) { }
+        private readonly musicRepository: Repository<MusicEntity>,
+        private readonly filesService: FilesService) { }
 
     async create(data: CreatePlaylistDto) {
+        const imageUrl = (await this.filesService.getFile(data.imageId)).url
         const newPlaylist = this.playlistRepository.create(data);
+        newPlaylist.imageUrl = imageUrl
         newPlaylist.musics = this.convertMusics(data.musicIds)
         return await this.playlistRepository.save(newPlaylist);
     }
