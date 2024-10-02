@@ -101,7 +101,11 @@ export class AlbumRepository {
       album.musics = musics;
     }
 
-
+    if (updateAlbumDto.imageId) {
+      const imageUrl = (await this.filesService.getFile(updateAlbumDto.imageId)).url;
+      album.imageUrl = imageUrl;
+    }
+    
     if (updateAlbumDto.authors) {
       const authors = [];
       for (let i = 0; i < updateAlbumDto.authors.length; i++) {

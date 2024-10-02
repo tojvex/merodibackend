@@ -49,6 +49,10 @@ export class PlaylistRepository {
         playlist.id = id;
         Object.assign(playlist, columns)
         playlist.musics = this.convertMusics(musicIds)
+        if (data.imageId) {
+    const imageUrl = (await this.filesService.getFile(data.imageId)).url;
+    playlist.imageUrl = imageUrl;
+  }
 
         return await this.playlistRepository.save(playlist)
     }

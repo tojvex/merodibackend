@@ -14,12 +14,12 @@ export class MusicRepository {
   private readonly MusicRepository: Repository<MusicEntity>,
   private readonly authorRepo: AuthorRepository,
   private readonly fileRepo: FilesRepository,
-  private readonly fileService: FilesService
+  private readonly filesService: FilesService
 ) { }
 
   async create(createMusicDto: CreateMusicDto) {
-    const imageUrl = (await this.fileService.getFile(createMusicDto.imageId)).url
-    const fileUrl = (await this.fileService.getFile(createMusicDto.fileIdForUrl)).url
+    const imageUrl = (await this.filesService.getFile(createMusicDto.imageId)).url
+    const fileUrl = (await this.filesService.getFile(createMusicDto.fileIdForUrl)).url
     const newMusic = new MusicEntity
     const authorArr = []
     newMusic.name = createMusicDto.name
@@ -87,6 +87,11 @@ export class MusicRepository {
         }
       }
       musicToUpdate.authors = authorArr;
+    }
+
+    if (updateMusicDto.imageId) {
+      const imageUrl = (await this.filesService.getFile(updateMusicDto.imageId)).url;
+      musicToUpdate.imageUrl = imageUrl;
     }
 
     return await this.MusicRepository.save(musicToUpdate);
