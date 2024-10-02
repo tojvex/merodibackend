@@ -29,7 +29,8 @@ export class UserRepository {
                 description: 'Empty Description',
                 userId: savedUser.id, 
                 musicIds: [],
-                image: ''
+                image: "https://i.discogs.com/i8yiT4fOZLH9D6lyVO_cfQM-UAaAWyx_yzJCmaVA9Vc/rs:fit/g:sm/q:90/h:486/w:500/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTMxMjc2/OTEtMTMxNzA1NTEz/My5qcGVn.jpeg"
+
             };
 
             const newPlaylist = await this.playlistRepo.create(playlistDto); 
