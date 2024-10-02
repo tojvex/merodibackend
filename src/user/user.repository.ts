@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { PlaylistRepository } from 'src/playlist/playlist.repository';
 import { PlaylistEntity } from 'src/playlist/entities/playlist.entity';
+import { CreatePlaylistDto } from 'src/playlist/dto/create-playlist.dto';
 
 
 @Injectable()
@@ -14,32 +15,41 @@ export class UserRepository {
     constructor(@InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
     private readonly playlistRepo: PlaylistRepository) { }
-
     async create(createUserDto: CreateUserDto) {
-        const newUser = this.userRepository.create(createUserDto)
+        const newUser = this.userRepository.create(createUserDto);
         const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
         newUser.password = hashedPassword;
 
         try {
-            const defaultPlaylist = await this.playlistRepo.findOne(1);
+            // Save the user first
+            const savedUser = await this.userRepository.save(newUser);
 
-            if (!defaultPlaylist) {
-              throw new Error('Default playlist not found');
-            }
+            // Create a new empty playlist for the user using the existing create() method
+            const playlistDto: CreatePlaylistDto = {
+                title: 'FavSongs',
+                description: 'Empty Description',
+                userId: savedUser.id, // Set the user ID
+                musicIds: [] // Empty music list
+                ,
+                image: ''
+            };
 
-           newUser.playlist = [defaultPlaylist];
+            const newPlaylist = await this.playlistRepo.create(playlistDto); // Use the repository's create method
 
-            const result = await this.userRepository.save(newUser)
-            const { password, ...UserEntity } = result
-            return UserEntity
+            // Link the new playlist to the user
+            savedUser.playlist = [newPlaylist];
+
+            // Save the user with the playlist linked
+            const result = await this.userRepository.save(savedUser);
+
+            const { password, ...UserEntity } = result;
+            return UserEntity;
         } catch (err) {
-            
-            if (err.errno == 1062) {
-                return 'Email is already in use'
+            if (err.errno === 1062) {
+                return 'Email is already in use';
             }
-            throw new Error('Registration failed')
+            throw new Error('Registration failed');
         }
-
     }
 
     async findAll() {
