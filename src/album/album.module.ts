@@ -6,12 +6,14 @@ import { AlbumEntity } from './entities/album.entity';
 import { AlbumRepository } from './album.repository';
 import { MusicModule } from 'src/music/music.module';
 import { AuthorModule } from 'src/author/author.module';
+import { FilesModule } from 'src/files/files.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([AlbumEntity]),
     forwardRef ( () => MusicModule),
-    forwardRef ( () => AuthorModule)
+    forwardRef ( () => AuthorModule),
+    forwardRef ( () => FilesModule)
   ],
   controllers: [AlbumController],
   providers: [AlbumService,AlbumRepository],

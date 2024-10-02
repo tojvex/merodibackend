@@ -12,11 +12,13 @@ import { MusicEntity } from 'src/music/entities/music.entity';
 import { AuthorEntity } from 'src/author/entities/author.entity';
 import { AlbumRepository } from 'src/album/album.repository';
 import { AlbumEntity } from 'src/album/entities/album.entity';
+import { FilesModule } from 'src/files/files.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([PlaylistEntity, MusicEntity, AuthorEntity, AlbumEntity]),
   forwardRef(() => MusicModule),
-  forwardRef(() => AuthorModule)],
+  forwardRef(() => AuthorModule),
+  forwardRef(() => FilesModule)],
   controllers: [PlaylistController],
   providers: [PlaylistService, PlaylistRepository, MusicRepository, AuthorRepository, AlbumRepository],
   exports: [PlaylistRepository]

@@ -16,7 +16,7 @@ export class MusicEntity {
     @Column({nullable: true})
     duration: number;
     
-    @Column({nullable: true})
+    @Column('text')
     imageUrl: string;
 
     @Column({nullable: true})

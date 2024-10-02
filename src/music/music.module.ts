@@ -6,12 +6,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { MusicEntity } from './entities/music.entity';
 import { AuthorModule } from 'src/author/author.module';
 import { StatsModule } from 'src/stats/stats.module';
+import { FilesModule } from 'src/files/files.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([MusicEntity]),
     forwardRef( () => StatsModule),
-   forwardRef( () =>  AuthorModule)
+   forwardRef( () =>  AuthorModule),
+   forwardRef( () =>  FilesModule)
   ],
   controllers: [MusicController],
   providers: [MusicService, MusicRepository],

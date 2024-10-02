@@ -19,7 +19,7 @@ export class AlbumEntity {
     @Column({nullable: true})
     description: string
 
-    @Column({nullable: true})
+    @Column('text')
     imageUrl: string
 
     @OneToMany(() => MusicEntity, (musics) => musics.album)

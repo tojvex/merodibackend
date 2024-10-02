@@ -9,12 +9,16 @@ export class CreateMusicDto {
     @IsNumber()
     duration: number
 
-    @IsUrl()
-    imageUrl: string
+    @IsNumber()
+    imageId: number
+
+    @IsNumber()
+    fileId: number
 
     @IsOptional()
     @IsNumber()
     albumId: number
+
 
     @IsOptional()
     @IsArray()

@@ -6,6 +6,8 @@ import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { MusicRepository } from 'src/music/music.repository';
 import { AuthorRepository } from 'src/author/author.repository';
+import { FilesRepository } from 'src/files/files.repository';
+import { FilesService } from 'src/files/files.service';
 
 @Injectable()
 export class AlbumRepository {
@@ -15,15 +17,17 @@ export class AlbumRepository {
     @Inject(forwardRef(() => MusicRepository))
     private readonly musicRepo: MusicRepository,
     @Inject(forwardRef(() => AuthorRepository))
-    private readonly authorRepo: AuthorRepository) { }
+    private readonly authorRepo: AuthorRepository,
+    private readonly filesService: FilesService) { }
 
   async create(createalbumDto: CreateAlbumDto) {
+    const imageUrl = (await this.filesService.getFile(createalbumDto.imageId)).url
     const album = new AlbumEntity
 
     album.title = createalbumDto.title
     album.releaseDate = createalbumDto.releaseDate
-    album.imageUrl = createalbumDto.imageUrl
     album.description = createalbumDto.description
+    album.imageUrl = imageUrl
 
     const musics = []
     const authors = []

@@ -5,20 +5,30 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { MusicEntity } from './entities/music.entity';
 import { Repository } from 'typeorm';
 import { AuthorRepository } from 'src/author/author.repository';
+import { FilesRepository } from 'src/files/files.repository';
+import { FilesService } from 'src/files/files.service';
 
 @Injectable()
 export class MusicRepository {
   constructor(@InjectRepository(MusicEntity)
   private readonly MusicRepository: Repository<MusicEntity>,
   private readonly authorRepo: AuthorRepository,
+  private readonly fileRepo: FilesRepository,
+  private readonly fileService: FilesService
 ) { }
 
   async create(createMusicDto: CreateMusicDto) {
+    const file = await this.fileRepo.findOne(createMusicDto.fileId)
+    const imageUrl = (await this.fileService.getFile(createMusicDto.imageId)).url
     const newMusic = new MusicEntity
     const authorArr = []
     newMusic.name = createMusicDto.name
     newMusic.duration = createMusicDto.duration
-    newMusic.imageUrl = createMusicDto.imageUrl
+    newMusic.imageUrl = imageUrl
+    newMusic.file = file
+    
+
+    
 
 
     if (createMusicDto.authors && createMusicDto.authors.length > 0) {
@@ -34,6 +44,7 @@ export class MusicRepository {
 
   }
 
+ 
 
   async findAll() {
     return await this.MusicRepository
@@ -49,7 +60,10 @@ export class MusicRepository {
       .where('music.id = :id', { id })
       .leftJoinAndSelect('music.album', 'album')
       .leftJoinAndSelect('music.authors', 'authors')
+      .leftJoinAndSelect('music.file', 'files')
       .getOne()
+
+      
   }
 
   async update(id: number, updateMusicDto: UpdateMusicDto) {

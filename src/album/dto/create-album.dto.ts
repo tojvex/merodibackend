@@ -1,4 +1,4 @@
-import { IsArray, IsOptional, IsString, IsUrl } from "class-validator";
+import { IsArray, IsNumber, IsOptional, IsString, IsUrl } from "class-validator";
 
 export class CreateAlbumDto {
     @IsString()
@@ -10,8 +10,9 @@ export class CreateAlbumDto {
     @IsString()
     description: string
 
-    @IsUrl()
-    imageUrl: string
+    @IsNumber()
+    @IsOptional()
+    imageId: number
 
     @IsOptional()
     @IsArray()

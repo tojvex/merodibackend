@@ -34,6 +34,7 @@ export class FilesService {
       file.bucket
     )
     file.url = procetcUrl
+    console.log(file.url)
 
     return file;
   }

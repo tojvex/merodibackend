@@ -10,7 +10,7 @@ export class FileEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column('text')
     url: string;
 
     @Column()
