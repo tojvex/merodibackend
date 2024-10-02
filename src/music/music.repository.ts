@@ -18,14 +18,16 @@ export class MusicRepository {
 ) { }
 
   async create(createMusicDto: CreateMusicDto) {
-    const file = await this.fileRepo.findOne(createMusicDto.fileId)
     const imageUrl = (await this.fileService.getFile(createMusicDto.imageId)).url
+    const fileUrl = (await this.fileService.getFile(createMusicDto.fileIdForUrl)).url
     const newMusic = new MusicEntity
     const authorArr = []
     newMusic.name = createMusicDto.name
     newMusic.duration = createMusicDto.duration
     newMusic.imageUrl = imageUrl
-    newMusic.file = file
+    newMusic.file = await this.fileRepo.findOne(createMusicDto.fileIdForUrl)
+    newMusic.fileUrl = fileUrl
+    newMusic.albumId = createMusicDto.albumId
     
 
     

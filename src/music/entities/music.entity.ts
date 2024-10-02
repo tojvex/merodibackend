@@ -19,8 +19,12 @@ export class MusicEntity {
     @Column('text')
     imageUrl: string;
 
+    @Column('text')
+    fileUrl: string
+
     @Column({nullable: true})
     albumId: number;
+
 
     @ManyToOne(() => AlbumEntity, (album) => album.musics)
     album: AlbumEntity;

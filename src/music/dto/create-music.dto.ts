@@ -13,7 +13,7 @@ export class CreateMusicDto {
     imageId: number
 
     @IsNumber()
-    fileId: number
+    fileIdForUrl: number
 
     @IsOptional()
     @IsNumber()
