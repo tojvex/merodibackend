@@ -50,7 +50,7 @@ export class UserRepository {
         const playlistDto = {
             title: 'FavSongs',
             description: 'Empty Description',
-            userId: userId,
+            userId: [userId],
             musicIds: [],
             imageId: 197
         };

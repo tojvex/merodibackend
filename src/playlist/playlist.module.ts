@@ -13,14 +13,19 @@ import { AuthorEntity } from 'src/author/entities/author.entity';
 import { AlbumRepository } from 'src/album/album.repository';
 import { AlbumEntity } from 'src/album/entities/album.entity';
 import { FilesModule } from 'src/files/files.module';
+import { UserModule } from 'src/user/user.module';
+import { UserEntity } from 'src/user/entities/user.entity';
+import { UserRepository } from 'src/user/user.repository';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([PlaylistEntity, MusicEntity, AuthorEntity, AlbumEntity]),
+  imports:[TypeOrmModule.forFeature([PlaylistEntity, MusicEntity, AuthorEntity, UserEntity, AlbumEntity]),
+  forwardRef(() => UserModule),
   forwardRef(() => MusicModule),
   forwardRef(() => AuthorModule),
-  forwardRef(() => FilesModule)],
+  forwardRef(() => FilesModule),
+],
   controllers: [PlaylistController],
-  providers: [PlaylistService, PlaylistRepository, MusicRepository, AuthorRepository, AlbumRepository],
+  providers: [PlaylistService, PlaylistRepository, MusicRepository, AuthorRepository, AlbumRepository, UserRepository],
   exports: [PlaylistRepository]
 })
 export class PlaylistModule {}

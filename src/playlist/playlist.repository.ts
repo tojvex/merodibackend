@@ -6,21 +6,30 @@ import { Repository } from 'typeorm';
 import { PlaylistEntity } from './entities/playlist.entity';
 import { MusicEntity } from 'src/music/entities/music.entity';
 import { FilesService } from 'src/files/files.service';
+import { UserRepository } from 'src/user/user.repository';
+import { AlbumRepository } from 'src/album/album.repository';
+import { UserEntity } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class PlaylistRepository {
 
     constructor(@InjectRepository(PlaylistEntity)
-    private readonly playlistRepository: Repository<PlaylistEntity>,
-    @InjectRepository(MusicEntity)
-        private readonly musicRepository: Repository<MusicEntity>,
-        private readonly filesService: FilesService) { }
+                private readonly playlistRepository: Repository<PlaylistEntity>,
+                @InjectRepository(MusicEntity)
+                private readonly musicRepository: Repository<MusicEntity>,
+                private readonly filesService: FilesService,
+
+                @InjectRepository(UserEntity)
+                private readonly userRepo: Repository<UserEntity>
+        ) { }
 
     async create(data: CreatePlaylistDto) {
+        const users = this.convertUsers(data.userId)
         const imageUrl = (await this.filesService.getFile(data.imageId)).url
         const newPlaylist = this.playlistRepository.create(data);
         newPlaylist.imageUrl = imageUrl
         newPlaylist.musics = this.convertMusics(data.musicIds)
+        newPlaylist.user = users
         return await this.playlistRepository.save(newPlaylist);
     }
 
@@ -79,5 +88,14 @@ export class PlaylistRepository {
             musics.push(music)
         }
         return musics
+    }
+    convertUsers(userIds: number[]): UserEntity[] {
+        const users = []
+        for (let item of userIds) {
+            const user = new UserEntity();
+            user.id = item;
+            users.push(user)
+        }
+        return users
     }
 }

@@ -14,8 +14,8 @@ export class CreatePlaylistDto {
     @IsOptional()
     imageId: any
 
-    @IsNumber()
-    userId: number;
+    @IsArray()
+    userId: number[];
 
     @IsArray()
     @IsNumber({}, {each: true })
