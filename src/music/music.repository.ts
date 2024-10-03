@@ -18,6 +18,7 @@ export class MusicRepository {
 ) { }
 
   async create(createMusicDto: CreateMusicDto) {
+
     const imageUrl = (await this.filesService.getFile(createMusicDto.imageId)).url
     const fileUrl = (await this.filesService.getFile(createMusicDto.fileIdForUrl)).url
     const newMusic = new MusicEntity
@@ -31,6 +32,7 @@ export class MusicRepository {
     
 
     
+  
 
 
     if (createMusicDto.authors && createMusicDto.authors.length > 0) {
@@ -40,7 +42,9 @@ export class MusicRepository {
 
       }
     }
+
     newMusic.authors = authorArr
+
 
     return await this.MusicRepository.save(newMusic)
 

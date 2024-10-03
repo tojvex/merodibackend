@@ -14,42 +14,50 @@ import { CreatePlaylistDto } from 'src/playlist/dto/create-playlist.dto';
 export class UserRepository {
     constructor(@InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
-    private readonly playlistRepo: PlaylistRepository) { }
+        private readonly playlistRepo: PlaylistRepository) { }
+
     async create(createUserDto: CreateUserDto) {
-        const newUser = this.userRepository.create(createUserDto);
-        const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
-        newUser.password = hashedPassword;
-
         try {
+            if (!createUserDto.playlist) {
+                const newUser = new UserEntity
+                newUser.email = createUserDto.email
+                newUser.password = await this.hashPassword(createUserDto.password);
 
-            const savedUser = await this.userRepository.save(newUser);
+                const savedUser = await this.userRepository.save(newUser);
 
-            const playlistDto = {
-                title: 'FavSongs',
-                description: 'Empty Description',
-                userId: savedUser.id, 
-                musicIds: [],
-                imageId: "https://i.discogs.com/i8yiT4fOZLH9D6lyVO_cfQM-UAaAWyx_yzJCmaVA9Vc/rs:fit/g:sm/q:90/h:486/w:500/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTMxMjc2/OTEtMTMxNzA1NTEz/My5qcGVn.jpeg"
+                const newPlaylist = await this.createDefaultPlaylist(savedUser.id);
 
-            };
+                savedUser.playlist = [newPlaylist];
+                const updatedUser = await this.userRepository.save(savedUser);
 
-            const newPlaylist = await this.playlistRepo.create(playlistDto); 
+                const { password, ...userWithoutPassword } = updatedUser;
+                return userWithoutPassword;
+            }
+        } catch (error) {
 
-          
-            savedUser.playlist = [newPlaylist];
-
-            const result = await this.userRepository.save(savedUser);
-
-            const { password, ...UserEntity } = result;
-            
-            return UserEntity;
-        } catch (err) {
-            if (err.errno === 1062) {
-                return 'Email is already in use';
+            if (error.code === 'ER_DUP_ENTRY') {
+                throw new Error('Email is already in use');
             }
             throw new Error('Registration failed');
         }
     }
+
+    private async hashPassword(password: string): Promise<string> {
+        return await bcrypt.hash(password, 10);
+    }
+
+    private async createDefaultPlaylist(userId: number) {
+        const playlistDto = {
+            title: 'FavSongs',
+            description: 'Empty Description',
+            userId: userId,
+            musicIds: [],
+            imageId: 1
+        };
+
+        return await this.playlistRepo.create(playlistDto);
+    }
+
 
     async findAll() {
         return await this.userRepository
@@ -75,20 +83,32 @@ export class UserRepository {
     }
 
     async update(id: number, updateUserDto: UpdateUserDto) {
+        console.log(updateUserDto)
+        const userToUpdate = await this.userRepository.findOneBy({ id })
+        const playlists = []
+        if (updateUserDto.playlist) {
+            for (let i = 0; i < updateUserDto.playlist.length; i++) {
+                const playlist = await this.playlistRepo.findOne(updateUserDto.playlist[i])
+                playlists.push(playlist)
+            }
+        }
+
+        console.log(playlists)
 
         if (updateUserDto.password) {
             const hashedPassword = await bcrypt.hash(updateUserDto.password, 10);
             updateUserDto.password = hashedPassword;
         }
 
-        await this.userRepository
-            .createQueryBuilder('user_entity')
-            .update()
-            .set(updateUserDto)
-            .where('user_entity.id = :id', { id })
-            .execute()
+        userToUpdate.email = updateUserDto.email || userToUpdate.email
+        userToUpdate.password = updateUserDto.password || userToUpdate.password
+        if(playlists.length > 0){
+            userToUpdate.playlist = playlists
+        }
+        
+        
 
-        return await this.userRepository.findOneBy({ id })
+        return await this.userRepository.save(userToUpdate)
     }
 
     async remove(id: number) {
@@ -107,5 +127,16 @@ export class UserRepository {
 
         return user
 
+    }
+
+    async search(query: string) {
+        return this.userRepository
+            .createQueryBuilder('user')
+            .where('user.email LIKE :query', { query: `%${query}%` })
+            .select([
+                'user.id',
+                'user.email',
+            ])
+            .getMany()
     }
 }

@@ -2,7 +2,6 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestj
 import { SearchService } from './search.service';
 import { CreateSearchDto } from './dto/create-search.dto';
 import { UpdateSearchDto } from './dto/update-search.dto';
-import { query } from 'express';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RoleEnum } from 'src/auth/enums/roles.enums';
 
@@ -14,6 +13,7 @@ export class SearchController {
 
   @Get()
   async search(@Query() query:  CreateSearchDto) {
+    console.log(query)
     return await this.searchService.search(query)
 
   }

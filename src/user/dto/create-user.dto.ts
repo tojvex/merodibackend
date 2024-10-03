@@ -1,4 +1,4 @@
-import { IsEmail, IsEnum, IsNotEmpty, IsString, Length, Matches} from "class-validator";
+import { isArray, IsArray, IsEmail, IsEnum, IsNotEmpty, IsString, Length, Matches} from "class-validator";
 import { RoleEnum } from "src/auth/enums/roles.enums";
 
 export class CreateUserDto {
@@ -18,4 +18,9 @@ export class CreateUserDto {
 
     @IsString()
     role: RoleEnum = RoleEnum.user;
+
+    @IsArray()
+    playlist: number[]
+
+
 }
