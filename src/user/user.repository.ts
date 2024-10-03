@@ -52,7 +52,8 @@ export class UserRepository {
             description: 'Empty Description',
             userId: [userId],
             musicIds: [],
-            imageId: 197
+            imageId: 197,
+            authorId: null
         };
 
         return await this.playlistRepo.create(playlistDto);

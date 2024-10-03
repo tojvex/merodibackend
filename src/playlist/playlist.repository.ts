@@ -9,6 +9,8 @@ import { FilesService } from 'src/files/files.service';
 import { UserRepository } from 'src/user/user.repository';
 import { AlbumRepository } from 'src/album/album.repository';
 import { UserEntity } from 'src/user/entities/user.entity';
+import { AuthorRepository } from 'src/author/author.repository';
+import { AuthorEntity } from 'src/author/entities/author.entity';
 
 @Injectable()
 export class PlaylistRepository {
@@ -18,16 +20,21 @@ export class PlaylistRepository {
                 @InjectRepository(MusicEntity)
                 private readonly musicRepository: Repository<MusicEntity>,
                 private readonly filesService: FilesService,
+                private readonly authorRepo: AuthorRepository,
 
                 @InjectRepository(UserEntity)
                 private readonly userRepo: Repository<UserEntity>
         ) { }
 
     async create(data: CreatePlaylistDto) {
+        const author = await this.authorRepo.findOne(data.authorId)
         const users = this.convertUsers(data.userId)
         const imageUrl = (await this.filesService.getFile(data.imageId)).url
-        const newPlaylist = this.playlistRepository.create(data);
+        const newPlaylist = new PlaylistEntity;
+        newPlaylist.title = data.title
+        newPlaylist.description = newPlaylist.description
         newPlaylist.imageUrl = imageUrl
+        newPlaylist.authors = author
         newPlaylist.musics = this.convertMusics(data.musicIds)
         newPlaylist.user = users
         return await this.playlistRepository.save(newPlaylist);
@@ -53,6 +60,8 @@ export class PlaylistRepository {
     
     async update(id: number, data: UpdatePlaylistDto) {
         const playlist = await this.findOne(id);
+        playlist.title = data.title || playlist.title
+        playlist.description = data.description || playlist.description
         if (!playlist) {
             throw new NotFoundException(`Playlist with id ${id} not found`);
         }
@@ -110,4 +119,5 @@ export class PlaylistRepository {
         }
         return users
     }
+
 }

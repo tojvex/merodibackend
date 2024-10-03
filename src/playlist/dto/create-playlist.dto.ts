@@ -12,7 +12,7 @@ export class CreatePlaylistDto {
     
     @IsNumber()
     @IsOptional()
-    imageId: any
+    imageId: number
 
     @IsArray()
     userId: number[];
@@ -20,4 +20,9 @@ export class CreatePlaylistDto {
     @IsArray()
     @IsNumber({}, {each: true })
     musicIds: number[];
+
+    
+    @IsOptional()
+    @IsNumber()
+    authorId: number
 }
