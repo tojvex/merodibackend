@@ -32,7 +32,7 @@ export class PlaylistRepository {
         const imageUrl = (await this.filesService.getFile(data.imageId)).url
         const newPlaylist = new PlaylistEntity;
         newPlaylist.title = data.title
-        newPlaylist.description = newPlaylist.description
+        newPlaylist.description = data.description
         newPlaylist.imageUrl = imageUrl
         newPlaylist.authors = author
         newPlaylist.musics = this.convertMusics(data.musicIds)
