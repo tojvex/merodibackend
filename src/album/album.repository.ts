@@ -47,7 +47,7 @@ export class AlbumRepository {
         const firstName = createalbumDto.authors[i].split(' ')[0]
         const lastName = createalbumDto.authors[i].split(' ')[1]
         const author = await this.authorRepo.findOneByFirstNameOrLastName(firstName, lastName)
-        authors.push(...author)
+        authors.push(author)
       }
     }
 

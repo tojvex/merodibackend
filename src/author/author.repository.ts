@@ -72,7 +72,7 @@ export class AuthorRepository {
             .where('author.firstName = :firstName AND author.lastName = :lastName', { firstName, lastName })
             .leftJoinAndSelect('author.musics', 'music')
             .leftJoinAndSelect('author.albums', 'albums')
-            .getMany();
+            .getOne();
     }
 
     async update(id: number, updateAuthorDto: UpdateAuthorDto) {
