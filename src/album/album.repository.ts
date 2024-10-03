@@ -21,6 +21,7 @@ export class AlbumRepository {
     private readonly filesService: FilesService) { }
 
   async create(createalbumDto: CreateAlbumDto) {
+    const file = await this.filesService.getFile(createalbumDto.imageId)
     const imageUrl = (await this.filesService.getFile(createalbumDto.imageId)).url
     const album = new AlbumEntity
 
@@ -28,6 +29,8 @@ export class AlbumRepository {
     album.releaseDate = createalbumDto.releaseDate
     album.description = createalbumDto.description
     album.imageUrl = imageUrl
+    album.file = file
+    
 
     const musics = []
     const authors = []
@@ -36,7 +39,6 @@ export class AlbumRepository {
       for (let i = 0; i < createalbumDto.musics.length; i++) {
         const music = await this.musicRepo.findOne(+createalbumDto.musics[i])
         musics.push(music)
-        console.log(music)
       }
     }
     album.musics = musics

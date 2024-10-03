@@ -18,12 +18,14 @@ export class AuthorRepository {
         private readonly filesService: FilesService) { }
 
     async create(createAuthorDto: CreateAuthorDto) {
+        const file = await this.filesService.getFile(createAuthorDto.imageId)
         const imageUrl = (await this.filesService.getFile(createAuthorDto.imageId)).url
         const author = new AuthorEntity
         author.firstName = createAuthorDto.firstName
         author.lastName = createAuthorDto.lastName
         author.biography = createAuthorDto.biography
         author.imageUrl = imageUrl
+        author.file = file
 
         const albums = []
         const musics = []
@@ -80,7 +82,7 @@ export class AuthorRepository {
         if (!author) {
             throw new NotFoundException(`Author with ID ${id} not found`);
         }
-        const imageUrl  = await (await this.filesService.getFile(updateAuthorDto.imageId)).url
+        const imageUrl  =  (await this.filesService.getFile(updateAuthorDto.imageId)).url
 
         author.firstName = updateAuthorDto.firstName || author.firstName;
         author.lastName = updateAuthorDto.lastName || author.lastName;

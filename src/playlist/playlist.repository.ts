@@ -27,6 +27,7 @@ export class PlaylistRepository {
         ) { }
 
     async create(data: CreatePlaylistDto) {
+        const file =  await this.filesService.getFile(data.imageId)
         const author = await this.authorRepo.findOne(data.authorId)
         const users = this.convertUsers(data.userId)
         const imageUrl = (await this.filesService.getFile(data.imageId)).url
@@ -37,6 +38,7 @@ export class PlaylistRepository {
         newPlaylist.authors = author
         newPlaylist.musics = this.convertMusics(data.musicIds)
         newPlaylist.user = users
+        newPlaylist.file = file
         return await this.playlistRepository.save(newPlaylist);
     }
 
