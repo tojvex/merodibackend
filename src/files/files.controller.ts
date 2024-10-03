@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, Upl
 import { FilesService } from './files.service';
 import { Public } from 'src/auth/decorators/public.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
+import * as mm from 'music-metadata'
 
 @Controller('files')
 export class FilesController {
@@ -23,7 +24,9 @@ export class FilesController {
   @Get(':id')
   @Public()
   async getFile(@Param('id') id: number) {
-    return await this.filesService.getFile(id);
+  
+  return await this.filesService.getFile(id);
+
   }
 
  
