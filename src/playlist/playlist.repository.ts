@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -52,19 +52,31 @@ export class PlaylistRepository {
     }
     
     async update(id: number, data: UpdatePlaylistDto) {
-        const { musicIds, ...columns } = data
-
-        const playlist = new PlaylistEntity()
-        playlist.id = id;
-        Object.assign(playlist, columns)
-        playlist.musics = this.convertMusics(musicIds)
+        const playlist = await this.findOne(id);
+        if (!playlist) {
+            throw new NotFoundException(`Playlist with id ${id} not found`);
+        }
+    
         if (data.imageId) {
-    const imageUrl = (await this.filesService.getFile(data.imageId)).url;
-    playlist.imageUrl = imageUrl;
-  }
-
-        return await this.playlistRepository.save(playlist)
+            const imageUrl = (await this.filesService.getFile(data.imageId)).url;
+            playlist.imageUrl = imageUrl;
+        }
+    
+        if (data.musicIds) {
+            playlist.musics = this.convertMusics(data.musicIds);
+        }
+    
+        if (data.userId) {
+            const users = this.convertUsers(data.userId);
+            playlist.user = users;
+        }
+    
+        // Update other fields if necessary
+        Object.assign(playlist, data);
+    
+        return await this.playlistRepository.save(playlist);
     }
+
 
     async remove(id: number) {
         await this.playlistRepository
