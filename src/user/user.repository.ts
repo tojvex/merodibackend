@@ -108,7 +108,9 @@ export class UserRepository {
         
         
 
-        return await this.userRepository.save(userToUpdate)
+        await this.userRepository.save(userToUpdate)
+
+        return this.findOne(userToUpdate.id)
     }
 
     async remove(id: number) {
