@@ -23,7 +23,7 @@ export class AuthService {
     )
     
     if(!isPasswordCorrect){
-      throw new UnauthorizedException('Access Denied')
+      throw new UnauthorizedException('Email or Password is not correct')
     }
 
     const jwtToken = await this.jwtService.signAsync({
