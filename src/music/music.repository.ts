@@ -81,6 +81,7 @@ export class MusicRepository {
 
     musicToUpdate.name = updateMusicDto.name || musicToUpdate.name;
     musicToUpdate.duration = updateMusicDto.duration || musicToUpdate.duration;
+    musicToUpdate.fileUrl = musicToUpdate.fileUrl
 
     if (updateMusicDto.authors) {
       const authorArr = [];
