@@ -98,6 +98,7 @@ export class MusicRepository {
     musicToUpdate.name = updateMusicDto.name || musicToUpdate.name;
     musicToUpdate.duration = updateMusicDto.duration || musicToUpdate.duration;
     musicToUpdate.fileUrl = musicToUpdate.fileUrl
+    musicToUpdate.playCount = musicToUpdate.playCount
 
     if (updateMusicDto.authors) {
       const authorArr = [];
