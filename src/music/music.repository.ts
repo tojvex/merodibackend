@@ -76,6 +76,18 @@ export class MusicRepository {
       
   }
 
+  async findManyByAlbum(albumId: number) {
+    // Find all music where albumId matches
+    return await this.MusicRepository
+      .createQueryBuilder('music')
+      .where('music.albumId = :albumId', { albumId })
+      .leftJoinAndSelect('music.album', 'album')
+      .leftJoinAndSelect('music.authors', 'authors')
+      .leftJoinAndSelect('music.file', 'files')
+      .getMany();  // Get many results instead of one
+
+  }
+
   async findOneForStats(id: number) {
 
     return await this.MusicRepository
