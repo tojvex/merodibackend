@@ -16,18 +16,18 @@ import { AuthorEntity } from 'src/author/entities/author.entity';
 export class PlaylistRepository {
 
     constructor(@InjectRepository(PlaylistEntity)
-                private readonly playlistRepository: Repository<PlaylistEntity>,
-                @InjectRepository(MusicEntity)
-                private readonly musicRepository: Repository<MusicEntity>,
-                private readonly filesService: FilesService,
-                private readonly authorRepo: AuthorRepository,
+    private readonly playlistRepository: Repository<PlaylistEntity>,
+        @InjectRepository(MusicEntity)
+        private readonly musicRepository: Repository<MusicEntity>,
+        private readonly filesService: FilesService,
+        private readonly authorRepo: AuthorRepository,
 
-                @InjectRepository(UserEntity)
-                private readonly userRepo: Repository<UserEntity>
-        ) { }
+        @InjectRepository(UserEntity)
+        private readonly userRepo: Repository<UserEntity>
+    ) { }
 
     async create(data: CreatePlaylistDto) {
-        const file =  await this.filesService.getFile(data.imageId)
+        const file = await this.filesService.getFile(data.imageId)
         const author = await this.authorRepo.findOne(data.authorId)
         const users = this.convertUsers(data.userId)
         const imageUrl = (await this.filesService.getFile(data.imageId)).url
@@ -59,7 +59,7 @@ export class PlaylistRepository {
             .addSelect('user.id')
             .getOne()
     }
-    
+
     async update(id: number, data: UpdatePlaylistDto) {
         const playlist = await this.findOne(id);
         playlist.title = data.title || playlist.title
@@ -67,24 +67,24 @@ export class PlaylistRepository {
         if (!playlist) {
             throw new NotFoundException(`Playlist with id ${id} not found`);
         }
-    
+
         if (data.imageId) {
             const imageUrl = (await this.filesService.getFile(data.imageId)).url;
             playlist.imageUrl = imageUrl;
         }
-    
+
         if (data.musicIds) {
             playlist.musics = this.convertMusics(data.musicIds);
         }
-    
+
         if (data.userId) {
             const users = this.convertUsers(data.userId);
             playlist.user = users;
         }
-    
+
         // Update other fields if necessary
         Object.assign(playlist, data);
-    
+
         return await this.playlistRepository.save(playlist);
     }
 
@@ -105,10 +105,15 @@ export class PlaylistRepository {
 
     async search(query: string) {
         return this.playlistRepository
-          .createQueryBuilder('playlist')
-          .where('playlist.title LIKE :query', { query: `%${query}%` })
-          .getMany()
-      }
+            .createQueryBuilder('playlist')
+            .where('playlist.title LIKE :query', { query: `%${query}%` }) 
+            .select([
+                'playlist.id',
+                'playlist.title',
+                'playlist.description', 
+            ])
+            .getMany(); 
+    }
 
     convertMusics(musicIds: number[]): MusicEntity[] {
         const musics = []
