@@ -87,10 +87,22 @@ export class AlbumRepository {
     if (!album) {
       throw new NotFoundException(`Album with ID ${id} not found`);
     }
+    
+    const authors = []
+    if(updateAlbumDto.authors){
+      
+    for(let i = 0; i < updateAlbumDto.authors.length; i++){
+      const authorFirstName = updateAlbumDto.authors[i].split(' ')[0]
+      const authorLastName = updateAlbumDto.authors[i].split(' ')[1]
+      const author = await this.authorRepo.findOneByFirstNameOrLastName(authorFirstName, authorLastName)
+      authors.push(author)
+    }
+    }
 
     album.title = updateAlbumDto.title || album.title;
     album.releaseDate = updateAlbumDto.releaseDate || album.releaseDate;
     album.description = updateAlbumDto.description || album.description
+    album.authors = authors || album.authors
 
     if (updateAlbumDto.musics) {
       const musics = [];
