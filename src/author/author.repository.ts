@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, forwardRef, Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { AuthorEntity } from "./entities/author.entity";
 import { Repository } from "typeorm";
@@ -18,8 +18,20 @@ export class AuthorRepository {
         private readonly filesService: FilesService) { }
 
     async create(createAuthorDto: CreateAuthorDto) {
-        const file = await this.filesService.getFile(createAuthorDto.imageId)
-        const imageUrl = (await this.filesService.getFile(createAuthorDto.imageId)).url
+        let file = null;
+        let imageUrl = null;
+
+        if (createAuthorDto.imageId) {
+            file = await this.filesService.getFile(createAuthorDto.imageId);
+            if (!file) {
+                throw new NotFoundException('Image file not found');
+            }
+            imageUrl = file.url;
+        } else {
+            throw new BadRequestException('Image is required');
+        }
+        
+        imageUrl = (await this.filesService.getFile(createAuthorDto.imageId)).url
         const author = new AuthorEntity
         author.firstName = createAuthorDto.firstName
         author.lastName = createAuthorDto.lastName
@@ -82,12 +94,12 @@ export class AuthorRepository {
         if (!author) {
             throw new NotFoundException(`Author with ID ${id} not found`);
         }
-        const imageUrl  =  (await this.filesService.getFile(updateAuthorDto.imageId)).url
+        const imageUrl = (await this.filesService.getFile(updateAuthorDto.imageId)).url
 
         author.firstName = updateAuthorDto.firstName || author.firstName;
         author.lastName = updateAuthorDto.lastName || author.lastName;
         author.biography = updateAuthorDto.biography || author.biography;
-        author.imageUrl =  imageUrl|| author.imageUrl;
+        author.imageUrl = imageUrl || author.imageUrl;
 
 
         if (updateAuthorDto.albums) {
