@@ -113,7 +113,9 @@ export class AlbumRepository {
           musics.push(music);
         }
       }
-      album.musics = musics;
+    
+      album.musics = musics
+
     }
 
     if (updateAlbumDto.imageId) {
@@ -123,23 +125,28 @@ export class AlbumRepository {
     
     if (updateAlbumDto.authors) {
       const authors = [];
-      for (let i = 0; i < updateAlbumDto.authors.length; i++) {
-        const author = await this.authorRepo.findOne(+updateAlbumDto.authors[i]);
-        if (author) {
-          authors.push(author);
+    
+      if(updateAlbumDto.authors){
+      
+        for(let i = 0; i < updateAlbumDto.authors.length; i++){
+          const authorFirstName = updateAlbumDto.authors[i].split(' ')[0]
+          const authorLastName = updateAlbumDto.authors[i].split(' ')[1]
+          const author = await this.authorRepo.findOneByFirstNameOrLastName(authorFirstName, authorLastName)
+          authors.push(author)
         }
       }
       
       album.authors = authors;
     }
+    console.log(album)
     return await this.AlbumRepository.save(album);
   }
 
 
   async remove(id: number) {
-    await this.AlbumRepository
+   return await this.AlbumRepository
       .createQueryBuilder()
-      .softDelete()
+      .delete()
       .from(AlbumEntity)
       .where('id = :id', { id })
       .execute()

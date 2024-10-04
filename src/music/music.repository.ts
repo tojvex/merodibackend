@@ -144,7 +144,7 @@ export class MusicRepository {
 
   async increment(music: MusicEntity) {
 
-    music.playCount --
+    music.playCount ++
 
    await this.MusicRepository.save(music)
     
