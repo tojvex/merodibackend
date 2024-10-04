@@ -139,6 +139,8 @@ export class AuthorRepository {
             .createQueryBuilder('author')
             .where('author.firstName LIKE :query', { query: `%${query}%` })
             .orWhere('author.lastName LIKE :query', { query: `%${query}%` })
+            .leftJoinAndSelect('author.musics', 'music')
+            .leftJoinAndSelect('author.albums', 'albums')
             .getMany()
     }
 }

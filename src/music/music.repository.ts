@@ -151,6 +151,8 @@ export class MusicRepository {
     return this.MusicRepository
       .createQueryBuilder('music')
       .where('music.name LIKE :query', { query: `%${query}%` })
+      .leftJoinAndSelect('music.album', 'album')
+      .leftJoinAndSelect('music.authors', 'authors')
       .getMany()
   }
 
