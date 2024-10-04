@@ -14,7 +14,8 @@ export class MusicRepository {
   private readonly MusicRepository: Repository<MusicEntity>,
   private readonly authorRepo: AuthorRepository,
   private readonly fileRepo: FilesRepository,
-  private readonly filesService: FilesService
+  private readonly filesService: FilesService,
+  
 ) { }
 
   async create(createMusicDto: CreateMusicDto) {
@@ -29,6 +30,7 @@ export class MusicRepository {
     newMusic.file = await this.fileRepo.findOne(createMusicDto.fileIdForUrl)
     newMusic.fileUrl = fileUrl
     newMusic.albumId = createMusicDto.albumId
+    newMusic.playCount = 0
     
 
     
@@ -61,7 +63,7 @@ export class MusicRepository {
   }
 
   async findOne(id: number) {
-    return await this.MusicRepository
+    const music = await this.MusicRepository
       .createQueryBuilder('music')
       .where('music.id = :id', { id })
       .leftJoinAndSelect('music.album', 'album')
@@ -69,6 +71,20 @@ export class MusicRepository {
       .leftJoinAndSelect('music.file', 'files')
       .getOne()
 
+    await this.increment(music)
+      return music
+      
+  }
+
+  async findOneForStats(id: number) {
+
+    return await this.MusicRepository
+      .createQueryBuilder('music')
+      .where('music.id = :id', { id })
+      .leftJoinAndSelect('music.album', 'album')
+      .leftJoinAndSelect('music.authors', 'authors')
+      .leftJoinAndSelect('music.file', 'files')
+      .getOne()
       
   }
 
@@ -123,5 +139,13 @@ export class MusicRepository {
       .createQueryBuilder('music')
       .where('music.name LIKE :query', { query: `%${query}%` })
       .getMany()
+  }
+
+  async increment(music: MusicEntity) {
+
+    music.playCount --
+
+   await this.MusicRepository.save(music)
+    
   }
 }

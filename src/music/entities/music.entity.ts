@@ -25,6 +25,10 @@ export class MusicEntity {
     @Column({nullable: true})
     albumId: number;
 
+    @Column()
+    playCount:number
+
+
 
     @ManyToOne(() => AlbumEntity, (album) => album.musics)
     album: AlbumEntity;
@@ -39,6 +43,7 @@ export class MusicEntity {
     @JoinTable({name: "music_playlist"})
     playlist: PlaylistEntity[];
 
+   
     @OneToMany(() => StatsEntity, stats => stats.music)
     stats: StatsEntity[];
 

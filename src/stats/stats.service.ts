@@ -16,7 +16,7 @@ export class StatsService {
 
   async recordPlay(userId: number, musicId: number){
     const user = await this.userRepository.findOne(userId);
-    const music = await this.musicRepository.findOne(musicId);
+    const music = await this.musicRepository.findOneForStats(musicId);
 
     if (!user || !music) {
         throw new NotFoundException('User or music not found');
