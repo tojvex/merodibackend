@@ -142,6 +142,7 @@ export class AlbumRepository {
     return this.AlbumRepository
       .createQueryBuilder('album')
       .where('album.title LIKE :query', { query: `%${query}%` })
+      .leftJoinAndSelect('album.authors', 'authors')
       .getMany()
   }
 }
