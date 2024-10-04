@@ -137,6 +137,12 @@ export class AlbumRepository {
 
 
   async remove(id: number) {
+    const musics = await this.musicRepo.findManyByAlbum(id)
+
+    for(let i = 0; i < musics.length; i++){
+      await this.musicRepo.remove(musics[i].id)
+    }
+
     await this.AlbumRepository
       .createQueryBuilder()
       .softDelete()
@@ -156,6 +162,7 @@ export class AlbumRepository {
       .createQueryBuilder('album')
       .where('album.title LIKE :query', { query: `%${query}%` })
       .leftJoinAndSelect('album.authors', 'authors')
+      .leftJoinAndSelect('album.musics', 'musics')
       .getMany()
   }
 }
