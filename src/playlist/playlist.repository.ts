@@ -103,6 +103,13 @@ export class PlaylistRepository {
             .getOne()
     }
 
+    async search(query: string) {
+        return this.playlistRepository
+          .createQueryBuilder('playlist')
+          .where('playlist.title LIKE :query', { query: `%${query}%` })
+          .getMany()
+      }
+
     convertMusics(musicIds: number[]): MusicEntity[] {
         const musics = []
         for (let item of musicIds) {
