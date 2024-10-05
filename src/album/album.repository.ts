@@ -99,10 +99,16 @@ export class AlbumRepository {
     }
     }
 
+    if(authors.length > 0){
+      album.authors = authors
+    }
+    else {
+      album.authors = album.authors
+    }
     album.title = updateAlbumDto.title || album.title;
     album.releaseDate = updateAlbumDto.releaseDate || album.releaseDate;
     album.description = updateAlbumDto.description || album.description
-    album.authors = authors || album.authors
+   
     album.file = album.file
 
     if (updateAlbumDto.musics) {
