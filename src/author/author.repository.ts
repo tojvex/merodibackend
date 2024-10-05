@@ -103,7 +103,6 @@ export class AuthorRepository {
         else {
             author.imageUrl = author.imageUrl
         }
-        console.log(author.imageUrl)
         author.firstName = updateAuthorDto.firstName || author.firstName;
         author.lastName = updateAuthorDto.lastName || author.lastName;
         author.biography = updateAuthorDto.biography || author.biography
