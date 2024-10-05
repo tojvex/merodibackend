@@ -29,13 +29,13 @@ export class StatsService {
         where: {
             user: { id: user.id },
             music: { id: music.id },  
-            date: today,             
+            CreatedAt: today,             
         },
     });
 
     if (!stat) {
         stat = new StatsEntity();
-        stat.date = today;
+        stat.CreatedAt = today;
         stat.user = user;
         stat.music = music;
         stat.playCount = 1;
@@ -74,7 +74,7 @@ async getMostPlayedMusicsToday(limit: number){
 
   const results = await this.statsRepository.createQueryBuilder('stats')
       .select('stats.musicId, SUM(stats.playCount) AS totalPlays')
-      .where('stats.date = :today', { today })
+      .where('stats.createdAt = :today', { today })
       .groupBy('stats.musicId')
       .orderBy('totalPlays', 'DESC')
       .limit(limit)
@@ -90,7 +90,7 @@ async getMostPlayedMusicsLastWeek(limit: number){
 
   const results = await this.statsRepository.createQueryBuilder('stats')
       .select('stats.musicId, SUM(stats.playCount) AS totalPlays')
-      .where('stats.date >= :sevenDaysAgo', { sevenDaysAgo })
+      .where('stats.createdAt >= :sevenDaysAgo', { sevenDaysAgo })
       .groupBy('stats.musicId')
       .orderBy('totalPlays', 'DESC')
       .limit(limit)

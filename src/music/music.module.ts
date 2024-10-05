@@ -7,10 +7,11 @@ import { MusicEntity } from './entities/music.entity';
 import { AuthorModule } from 'src/author/author.module';
 import { StatsModule } from 'src/stats/stats.module';
 import { FilesModule } from 'src/files/files.module';
+import { StatsEntity } from 'src/stats/entities/stat.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([MusicEntity]),
+    TypeOrmModule.forFeature([MusicEntity, StatsEntity]),
     forwardRef( () => StatsModule),
    forwardRef( () =>  AuthorModule),
    forwardRef( () =>  FilesModule)

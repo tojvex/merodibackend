@@ -1,6 +1,6 @@
 import { MusicEntity } from "src/music/entities/music.entity";
 import { UserEntity } from "src/user/entities/user.entity";
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity('stats')
 export class StatsEntity {
@@ -17,5 +17,12 @@ export class StatsEntity {
   playCount: number;
 
   @CreateDateColumn()
-  date: Date;  // Automatically records the timestamp of the entry
+
+  CreatedAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date
+
+  @DeleteDateColumn()
+  deletedAt: Date
 }

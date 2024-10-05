@@ -7,11 +7,14 @@ import { Repository } from 'typeorm';
 import { AuthorRepository } from 'src/author/author.repository';
 import { FilesRepository } from 'src/files/files.repository';
 import { FilesService } from 'src/files/files.service';
+import { StatsEntity } from 'src/stats/entities/stat.entity';
 
 @Injectable()
 export class MusicRepository {
   constructor(@InjectRepository(MusicEntity)
   private readonly MusicRepository: Repository<MusicEntity>,
+              @InjectRepository(StatsEntity)
+  private readonly statsEntity: Repository<StatsEntity>,
   private readonly authorRepo: AuthorRepository,
   private readonly fileRepo: FilesRepository,
   private readonly filesService: FilesService,
@@ -138,6 +141,12 @@ export class MusicRepository {
       .softDelete()
       .where('id = :id', { id })
       .execute();
+
+    await this.statsEntity
+    .createQueryBuilder('stats')
+    .softDelete()
+    .where('musicId = :id', {id})
+    .execute()
 
     return this.MusicRepository
       .createQueryBuilder('music')

@@ -16,10 +16,12 @@ import { FilesModule } from 'src/files/files.module';
 import { UserModule } from 'src/user/user.module';
 import { UserEntity } from 'src/user/entities/user.entity';
 import { UserRepository } from 'src/user/user.repository';
+import { StatsEntity } from 'src/stats/entities/stat.entity';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([PlaylistEntity, MusicEntity, AuthorEntity, UserEntity, AlbumEntity]),
+  imports:[TypeOrmModule.forFeature([PlaylistEntity, MusicEntity, AuthorEntity, UserEntity, AlbumEntity, StatsEntity]),
   forwardRef(() => UserModule),
+  forwardRef(() => PlaylistModule),
   forwardRef(() => MusicModule),
   forwardRef(() => AuthorModule),
   forwardRef(() => FilesModule),
