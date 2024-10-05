@@ -110,7 +110,10 @@ export class AuthorRepository {
                     albums.push(album);
                 }
             }
+
             author.albums = albums;
+        }else {
+            author.albums = author.albums
         }
 
 
@@ -123,6 +126,8 @@ export class AuthorRepository {
                 }
             }
             author.musics = musics;
+        }else {
+            author.musics = author.musics
         }
 
 
