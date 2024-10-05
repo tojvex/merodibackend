@@ -30,7 +30,7 @@ export class AuthorRepository {
         } else {
             throw new BadRequestException('Image is required');
         }
-        
+
         imageUrl = (await this.filesService.getFile(createAuthorDto.imageId)).url
         const author = new AuthorEntity
         author.firstName = createAuthorDto.firstName
@@ -94,12 +94,19 @@ export class AuthorRepository {
         if (!author) {
             throw new NotFoundException(`Author with ID ${id} not found`);
         }
-        const imageUrl = (await this.filesService.getFile(updateAuthorDto.imageId)).url
+        console.log(updateAuthorDto.imageId)
 
+        if (updateAuthorDto.imageId) {
+            const imageUrl = (await this.filesService.getFile(updateAuthorDto.imageId)).url
+            author.imageUrl = imageUrl
+        }
+        else {
+            author.imageUrl = author.imageUrl
+        }
+        console.log(author.imageUrl)
         author.firstName = updateAuthorDto.firstName || author.firstName;
         author.lastName = updateAuthorDto.lastName || author.lastName;
-        author.biography = updateAuthorDto.biography || author.biography;
-        author.imageUrl = imageUrl || author.imageUrl;
+        author.biography = updateAuthorDto.biography || author.biography
 
 
         if (updateAuthorDto.albums) {
@@ -112,7 +119,7 @@ export class AuthorRepository {
             }
 
             author.albums = albums;
-        }else {
+        } else {
             author.albums = author.albums
         }
 
@@ -126,7 +133,7 @@ export class AuthorRepository {
                 }
             }
             author.musics = musics;
-        }else {
+        } else {
             author.musics = author.musics
         }
 
