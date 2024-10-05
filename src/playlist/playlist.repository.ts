@@ -64,6 +64,8 @@ export class PlaylistRepository {
         const playlist = await this.findOne(id);
         playlist.title = data.title || playlist.title
         playlist.description = data.description || playlist.description
+    
+
         if (!playlist) {
             throw new NotFoundException(`Playlist with id ${id} not found`);
         }
@@ -71,6 +73,8 @@ export class PlaylistRepository {
         if (data.imageId) {
             const imageUrl = (await this.filesService.getFile(data.imageId)).url;
             playlist.imageUrl = imageUrl;
+        }else {
+            playlist.imageUrl = playlist.imageUrl
         }
     
         if (data.musicIds) {

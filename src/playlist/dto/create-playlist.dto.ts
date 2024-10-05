@@ -16,10 +16,12 @@ export class CreatePlaylistDto {
 
     @IsArray()
     userId: number[];
-
+    
     @IsArray()
     @IsNumber({}, {each: true })
     musicIds: number[];
+
+
 
     
     @IsOptional()
