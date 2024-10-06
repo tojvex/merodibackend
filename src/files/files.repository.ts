@@ -31,4 +31,14 @@ export class FilesRepository {
     async findAll(){
       return await this.filesRepository.find()
     }
+
+    async findAwsFiles(): Promise<number[]> {
+      const awsFiles = await this.filesRepository
+          .createQueryBuilder('file')
+          .where('file.url LIKE :url', { url: '%aws%' })  
+          .select(['file.id', 'file.url']) 
+          .getMany();
+
+      return awsFiles.map(file => file.id);
+  }
 }

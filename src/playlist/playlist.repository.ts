@@ -11,6 +11,8 @@ import { AlbumRepository } from 'src/album/album.repository';
 import { UserEntity } from 'src/user/entities/user.entity';
 import { AuthorRepository } from 'src/author/author.repository';
 import { AuthorEntity } from 'src/author/entities/author.entity';
+import { FileEntity } from 'src/files/entities/file.entity';
+import { FilesRepository } from 'src/files/files.repository';
 
 @Injectable()
 export class PlaylistRepository {
@@ -20,6 +22,7 @@ export class PlaylistRepository {
         @InjectRepository(MusicEntity)
         private readonly musicRepository: Repository<MusicEntity>,
         private readonly filesService: FilesService,
+        private readonly filesRepository: FilesRepository,
         private readonly authorRepo: AuthorRepository,
 
         @InjectRepository(UserEntity)
@@ -27,20 +30,38 @@ export class PlaylistRepository {
     ) { }
 
     async create(data: CreatePlaylistDto) {
-        const file = await this.filesService.getFile(data.imageId)
-        const author = await this.authorRepo.findOne(data.authorId)
-        const users = this.convertUsers(data.userId)
-        const imageUrl = (await this.filesService.getFile(data.imageId)).url
-        const newPlaylist = new PlaylistEntity;
-        newPlaylist.title = data.title
-        newPlaylist.description = data.description
-        newPlaylist.imageUrl = imageUrl
-        newPlaylist.authors = author
-        newPlaylist.musics = this.convertMusics(data.musicIds)
-        newPlaylist.user = users
-        newPlaylist.file = file
-        return await this.playlistRepository.save(newPlaylist);
+        const file = await this.filesService.getFile(data.imageId);
+        if (!file) {
+            throw new NotFoundException(`File with id ${data.imageId} not found`);
+        }
+    
+        const author = await this.authorRepo.findOne(data.authorId);
+        if (!author) {
+            throw new NotFoundException(`Author with id ${data.authorId} not found`);
+        }
+
+        const users = this.convertUsers(data.userId);
+        if (!users.length) {
+            throw new NotFoundException('No valid users found');
+        }
+    
+        const newPlaylist = new PlaylistEntity();
+        newPlaylist.title = data.title;
+        newPlaylist.description = data.description;
+        newPlaylist.imageUrl = file.url; 
+        newPlaylist.authors = author;
+        newPlaylist.musics = this.convertMusics(data.musicIds);
+        newPlaylist.user = users;
+        newPlaylist.file = file;  
+    
+        const savedPlaylist = await this.playlistRepository.save(newPlaylist);
+    
+        return {
+            ...savedPlaylist,
+            imageId: file.id,  
+        };
     }
+    
 
     async findAll() {
         return await this.playlistRepository
@@ -62,35 +83,41 @@ export class PlaylistRepository {
 
     async update(id: number, data: UpdatePlaylistDto) {
         const playlist = await this.findOne(id);
-        playlist.title = data.title || playlist.title
-        playlist.description = data.description || playlist.description
-    
-
+        
         if (!playlist) {
             throw new NotFoundException(`Playlist with id ${id} not found`);
         }
 
+        playlist.title = data.title || playlist.title;
+        playlist.description = data.description || playlist.description;
+    
+        let file: FileEntity = playlist.file;
+    
         if (data.imageId) {
-            const imageUrl = (await this.filesService.getFile(data.imageId)).url;
-            playlist.imageUrl = imageUrl;
-        }else {
-            playlist.imageUrl = playlist.imageUrl
+            file = await this.filesService.getFile(data.imageId);  
+            playlist.imageUrl = file.url; 
+            playlist.file = file;  
         }
-
+    
         if (data.musicIds) {
             playlist.musics = this.convertMusics(data.musicIds);
         }
-
+    
         if (data.userId) {
             const users = this.convertUsers(data.userId);
             playlist.user = users;
         }
-
-        // Update other fields if necessary
+    
         Object.assign(playlist, data);
-
-        return await this.playlistRepository.save(playlist);
+    
+        const updatedPlaylist = await this.playlistRepository.save(playlist);
+    
+        return {
+            ...updatedPlaylist,
+            imageId: file.id, 
+        };
     }
+    
 
 
     async remove(id: number) {
@@ -136,6 +163,10 @@ export class PlaylistRepository {
             users.push(user)
         }
         return users
+    }
+
+    async findAwsImageIds(): Promise<number[]> {
+        return await this.filesRepository.findAwsFiles();
     }
 
 }

@@ -27,4 +27,8 @@ export class PlaylistService {
   async remove(id: number) {
     return await this.playlistRepository.remove(id)
   }
+
+  async getAwsImageIdsForPlaylists(): Promise<number[]> {
+    return await this.playlistRepository.findAwsImageIds();
+  }
 }

@@ -42,4 +42,8 @@ export class FilesService {
     return this.filesRepository.findAll()
   }
 
+  async getAwsFileIds(): Promise<number[]> {
+    return await this.filesRepository.findAwsFiles();
+}
+
 }

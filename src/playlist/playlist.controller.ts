@@ -40,4 +40,10 @@ export class PlaylistController {
   async remove(@Param('id') id: string) {
     return await this.playlistService.remove(+id);
   }
+
+  @Roles(RoleEnum.admin, RoleEnum.user)  
+  @Get('aws-images')
+  async getAwsImages() {
+    return await this.playlistService.getAwsImageIdsForPlaylists(); 
+  }
 }
