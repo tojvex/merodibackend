@@ -35,9 +35,9 @@ export class PlaylistRepository {
             throw new NotFoundException(`File with id ${data.imageId} not found`);
         }
     
-        const author = await this.authorRepo.findOne(data.authorId);
+        let author = await this.authorRepo.findOne(data.authorId);
         if (!author) {
-            throw new NotFoundException(`Author with id ${data.authorId} not found`);
+            author = null  
         }
 
         const users = this.convertUsers(data.userId);
@@ -49,7 +49,7 @@ export class PlaylistRepository {
         newPlaylist.title = data.title;
         newPlaylist.description = data.description;
         newPlaylist.imageUrl = file.url; 
-        newPlaylist.authors = author;
+        newPlaylist.authors = author || null
         newPlaylist.musics = this.convertMusics(data.musicIds);
         newPlaylist.user = users;
         newPlaylist.file = file;  
