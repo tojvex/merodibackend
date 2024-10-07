@@ -52,7 +52,7 @@ export class UserRepository {
             description: 'Empty Description',
             userId: [userId],
             musicIds: [],
-            imageId: 197,
+            imageId: 387,
             authorId: null
         };
 
