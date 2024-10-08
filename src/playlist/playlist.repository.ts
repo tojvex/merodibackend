@@ -50,7 +50,7 @@ export class PlaylistRepository {
         newPlaylist.description = data.description;
         newPlaylist.imageUrl = file.url; 
         newPlaylist.authors = author || null
-        newPlaylist.musics = this.convertMusics(data.musicIds);
+        newPlaylist.musics = await this.convertMusics(data.musicIds);
         newPlaylist.user = users;
         newPlaylist.file = file;  
     
@@ -100,7 +100,7 @@ export class PlaylistRepository {
         }
     
         if (data.musicIds) {
-            playlist.musics = this.convertMusics(data.musicIds);
+            playlist.musics = await  this.convertMusics(data.musicIds);
         }
     
         if (data.userId) {
@@ -146,7 +146,7 @@ export class PlaylistRepository {
             .getMany(); 
     }
 
-    convertMusics(musicIds: number[]): MusicEntity[] {
+   async convertMusics(musicIds: number[]): Promise<MusicEntity[]> {
         const musics = []
         for (let item of musicIds) {
             const music = new MusicEntity();
