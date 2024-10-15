@@ -28,8 +28,6 @@ export class MusicEntity {
     @Column()
     playCount:number
 
-
-
     @ManyToOne(() => AlbumEntity, (album) => album.musics)
     album: AlbumEntity;
 

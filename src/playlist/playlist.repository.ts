@@ -145,9 +145,10 @@ export class PlaylistRepository {
                 'playlist.title',
                 'playlist.description',
                 'author.id',
-                'author.name',      
+                'author.firstName',  
+                'author.lastName',     
                 'music.id',
-                'music.title',       
+                'music.name',       
             ])
             .getMany();
     }
