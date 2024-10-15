@@ -139,6 +139,7 @@ export class PlaylistRepository {
             .createQueryBuilder('playlist')
             .leftJoinAndSelect('playlist.authors', 'author') 
             .leftJoinAndSelect('playlist.musics', 'music')  
+            .leftJoinAndSelect('playlist.user', 'user') 
             .where('playlist.title LIKE :query', { query: `%${query}%` })
             .select([
                 'playlist.id',
@@ -148,10 +149,13 @@ export class PlaylistRepository {
                 'author.firstName',  
                 'author.lastName',     
                 'music.id',
-                'music.name',       
+                'music.name', 
+                'user.id',            
+                'user.email'          
             ])
             .getMany();
     }
+    
     
    async convertMusics(musicIds: number[]): Promise<MusicEntity[]> {
         const musics = []
