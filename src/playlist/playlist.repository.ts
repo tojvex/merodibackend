@@ -135,17 +135,23 @@ export class PlaylistRepository {
     }
 
     async search(query: string) {
-        return this.playlistRepository
+        return await this.playlistRepository
             .createQueryBuilder('playlist')
-            .where('playlist.title LIKE :query', { query: `%${query}%` }) 
+            .leftJoinAndSelect('playlist.authors', 'author') 
+            .leftJoinAndSelect('playlist.musics', 'music')  
+            .where('playlist.title LIKE :query', { query: `%${query}%` })
             .select([
                 'playlist.id',
                 'playlist.title',
-                'playlist.description', 
+                'playlist.description',
+                'author.id',
+                'author.name',      
+                'music.id',
+                'music.title',       
             ])
-            .getMany(); 
+            .getMany();
     }
-
+    
    async convertMusics(musicIds: number[]): Promise<MusicEntity[]> {
         const musics = []
         for (let item of musicIds) {
