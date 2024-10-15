@@ -30,7 +30,7 @@ export class AlbumRepository {
     album.description = createalbumDto.description
     album.imageUrl = imageUrl
     album.file = file
-    
+
 
     const musics = []
     const authors = []
@@ -53,7 +53,7 @@ export class AlbumRepository {
       }
     }
 
-    if(!authors.length){
+    if (!authors.length) {
       throw new NotFoundException('Author was not found')
     }
 
@@ -82,39 +82,31 @@ export class AlbumRepository {
   }
 
   async update(id: number, updateAlbumDto: UpdateAlbumDto) {
-
-    const album = await this.AlbumRepository.findOne({ where: { id } });
+    const album = await this.AlbumRepository.findOne({ where: { id }, relations: ['authors', 'musics'] });
     if (!album) {
       throw new NotFoundException(`Album with ID ${id} not found`);
     }
-    
-    const authors = []
-    if(updateAlbumDto.authors){
-      
-    for(let i = 0; i < updateAlbumDto.authors.length; i++){
-      const authorFirstName = updateAlbumDto.authors[i].split(' ')[0]
-      const authorLastName = updateAlbumDto.authors[i].split(' ')[1]
-      const author = await this.authorRepo.findOneByFirstNameOrLastName(authorFirstName, authorLastName)
-      authors.push(author)
-    }
+
+    if (updateAlbumDto.authors) {
+      const authors = [];
+      for (const authorName of updateAlbumDto.authors) {
+        const [authorFirstName, authorLastName] = authorName.split(' ');
+        const author = await this.authorRepo.findOneByFirstNameOrLastName(authorFirstName, authorLastName);
+        if (author) {
+          authors.push(author);
+        }
+      }
+      album.authors = authors;
     }
 
-    if(authors.length > 0){
-      album.authors = authors
-    }
-    else {
-      album.authors = album.authors
-    }
     album.title = updateAlbumDto.title || album.title;
     album.releaseDate = updateAlbumDto.releaseDate || album.releaseDate;
-    album.description = updateAlbumDto.description || album.description
-   
-    album.file = album.file
+    album.description = updateAlbumDto.description || album.description;
 
     if (updateAlbumDto.musics) {
       const musics = [];
-      for (let i = 0; i < updateAlbumDto.musics.length; i++) {
-        const music = await this.musicRepo.findOne(+updateAlbumDto.musics[i]);
+      for (const musicId of updateAlbumDto.musics) {
+        const music = await this.musicRepo.findOne(+musicId);
         if (music) {
           musics.push(music);
         }
@@ -126,26 +118,16 @@ export class AlbumRepository {
       const imageUrl = (await this.filesService.getFile(updateAlbumDto.imageId)).url;
       album.imageUrl = imageUrl;
     }
-    
-    if (updateAlbumDto.authors) {
-      const authors = [];
-      for (let i = 0; i < updateAlbumDto.authors.length; i++) {
-        const author = await this.authorRepo.findOne(+updateAlbumDto.authors[i]);
-        if (author) {
-          authors.push(author);
-        }
-      }
-      
-      album.authors = authors;
-    }
+
     return await this.AlbumRepository.save(album);
   }
+
 
 
   async remove(id: number) {
     const musics = await this.musicRepo.findManyByAlbum(id)
 
-    for(let i = 0; i < musics.length; i++){
+    for (let i = 0; i < musics.length; i++) {
       await this.musicRepo.remove(musics[i].id)
     }
 

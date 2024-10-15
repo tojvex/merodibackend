@@ -104,7 +104,7 @@ export class PlaylistRepository {
         }
     
         if (data.userId) {
-            const users = this.convertUsers(data.userId);
+            const users = await this.convertUsers(data.userId);
             playlist.user = users;
         }
     
