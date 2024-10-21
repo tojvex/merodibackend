@@ -67,8 +67,11 @@ export class PlaylistRepository {
         return await this.playlistRepository
             .createQueryBuilder('playlist_entity')
             .leftJoinAndSelect('playlist_entity.musics', 'musics')
-            .getMany()
+            .leftJoinAndSelect('playlist_entity.user', 'user') 
+            .addSelect(['user.id', 'user.email']) 
+            .getMany();
     }
+    
 
     async findOne(id: number) {
         return await this.playlistRepository
