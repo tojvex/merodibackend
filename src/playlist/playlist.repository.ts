@@ -68,18 +68,9 @@ export class PlaylistRepository {
             .createQueryBuilder('playlist_entity')
             .leftJoinAndSelect('playlist_entity.musics', 'musics')
             .leftJoin('playlist_entity.user', 'user') 
-            .select([
-                'playlist_entity.id', 
-                'playlist_entity.title',
-                'playlist_entity.description', 
-                'musics.id', 
-                'musics.name', 
-                'user.id', 
-                'user.email' 
-            ]) 
-            .getMany();
+            .addSelect('user.id')
+            .getMany(); 
     }
-    
     
 
     async findOne(id: number) {
