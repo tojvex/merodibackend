@@ -12,10 +12,10 @@ export class UserEntity {
     @Column({length: 255, unique: true})
     email: string;
 
-    @Column({length: 255 })
+    @Column({length: 255, select: false  })
     password: string;
 
-    @Column({default: RoleEnum.user, type: 'enum', enum: RoleEnum})
+    @Column({default: RoleEnum.user, type: 'enum', enum: RoleEnum, select: false })
     role: RoleEnum;
 
     @ManyToOne(() => FileEntity, (file) => file.user)
