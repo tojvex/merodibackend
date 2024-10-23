@@ -6,8 +6,6 @@ import { UserEntity } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { PlaylistRepository } from 'src/playlist/playlist.repository';
-import { PlaylistEntity } from 'src/playlist/entities/playlist.entity';
-import { CreatePlaylistDto } from 'src/playlist/dto/create-playlist.dto';
 
 
 @Injectable()

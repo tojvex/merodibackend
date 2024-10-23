@@ -9,7 +9,6 @@ import { Roles } from 'src/auth/decorators/roles.decorator';
 export class PlaylistController {
   constructor(private readonly playlistService: PlaylistService) {}
 
-
   @Roles(RoleEnum.admin, RoleEnum.user)
   @Post()
   async create(@Body() createPlaylistDto: CreatePlaylistDto) {
@@ -21,7 +20,6 @@ export class PlaylistController {
   async findAll() {
     return await this.playlistService.findAll();
   }
-
 
   @Roles(RoleEnum.admin, RoleEnum.user)
   @Get(':id')

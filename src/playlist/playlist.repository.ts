@@ -34,44 +34,43 @@ export class PlaylistRepository {
         if (!file) {
             throw new NotFoundException(`File with id ${data.imageId} not found`);
         }
-    
+
         let author = await this.authorRepo.findOne(data.authorId);
         if (!author) {
-            author = null  
+            author = null
         }
 
         const users = this.convertUsers(data.userId);
         if (!users.length) {
             throw new NotFoundException('No valid users found');
         }
-    
+
         const newPlaylist = new PlaylistEntity();
         newPlaylist.title = data.title;
         newPlaylist.description = data.description;
-        newPlaylist.imageUrl = file.url; 
+        newPlaylist.imageUrl = file.url;
         newPlaylist.authors = author || null
         newPlaylist.musics = await this.convertMusics(data.musicIds);
         newPlaylist.user = users;
-        newPlaylist.file = file;  
-    
+        newPlaylist.file = file;
+
         const savedPlaylist = await this.playlistRepository.save(newPlaylist);
-    
+
         return {
             ...savedPlaylist,
-            imageId: file.id,  
+            imageId: file.id,
         };
     }
-    
 
     async findAll() {
         return await this.playlistRepository
-            .createQueryBuilder('playlist_entity')
-            .leftJoinAndSelect('playlist_entity.musics', 'musics')
-            .leftJoin('playlist_entity.user', 'user') 
-            .addSelect('user.id')
-            .getMany(); 
+          .createQueryBuilder('playlist_entity')
+          .leftJoinAndSelect('playlist_entity.musics', 'musics')
+          .leftJoin('playlist_entity.user', 'user')
+          .addSelect(['user.id', 'user.email']) 
+          .getMany();
     }
-    
+
 
     async findOne(id: number) {
         return await this.playlistRepository
@@ -86,41 +85,41 @@ export class PlaylistRepository {
 
     async update(id: number, data: UpdatePlaylistDto) {
         const playlist = await this.findOne(id);
-        
+
         if (!playlist) {
             throw new NotFoundException(`Playlist with id ${id} not found`);
         }
 
         playlist.title = data.title || playlist.title;
         playlist.description = data.description || playlist.description;
-    
+
         let file: FileEntity = playlist.file;
-    
+
         if (data.imageId) {
-            file = await this.filesService.getFile(data.imageId);  
-            playlist.imageUrl = file.url; 
-            playlist.file = file;  
+            file = await this.filesService.getFile(data.imageId);
+            playlist.imageUrl = file.url;
+            playlist.file = file;
         }
-    
+
         if (data.musicIds) {
-            playlist.musics = await  this.convertMusics(data.musicIds);
+            playlist.musics = await this.convertMusics(data.musicIds);
         }
-    
+
         if (data.userId) {
             const users = await this.convertUsers(data.userId);
             playlist.user = users;
         }
-    
+
         Object.assign(playlist, data);
-    
+
         const updatedPlaylist = await this.playlistRepository.save(playlist);
-    
+
         return {
             ...updatedPlaylist,
-            imageId: file.id, 
+            imageId: file.id,
         };
     }
-    
+
 
 
     async remove(id: number) {
@@ -140,27 +139,27 @@ export class PlaylistRepository {
     async search(query: string) {
         return await this.playlistRepository
             .createQueryBuilder('playlist')
-            .leftJoinAndSelect('playlist.authors', 'author') 
-            .leftJoinAndSelect('playlist.musics', 'music')  
-            .leftJoinAndSelect('playlist.user', 'user') 
+            .leftJoinAndSelect('playlist.authors', 'author')
+            .leftJoinAndSelect('playlist.musics', 'music')
+            .leftJoinAndSelect('playlist.user', 'user')
             .where('playlist.title LIKE :query', { query: `%${query}%` })
             .select([
                 'playlist.id',
                 'playlist.title',
                 'playlist.description',
                 'author.id',
-                'author.firstName',  
-                'author.lastName',     
+                'author.firstName',
+                'author.lastName',
                 'music.id',
-                'music.name', 
-                'user.id',            
-                'user.email'          
+                'music.name',
+                'user.id',
+                'user.email'
             ])
             .getMany();
     }
-    
-    
-   async convertMusics(musicIds: number[]): Promise<MusicEntity[]> {
+
+
+    async convertMusics(musicIds: number[]): Promise<MusicEntity[]> {
         const musics = []
         for (let item of musicIds) {
             const music = new MusicEntity();

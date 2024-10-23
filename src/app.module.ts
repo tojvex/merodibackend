@@ -27,7 +27,6 @@ import { StatsModule } from './stats/stats.module';
       database: process.env.DATABASE_NAME,
       autoLoadEntities: true,
       synchronize: true,
-
     }),
     JwtModule.register({
       secret: process.env.JWT_PASSWORD,

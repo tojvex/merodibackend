@@ -9,7 +9,6 @@ export class CreatePlaylistDto {
     @IsString()
     description: string;
 
-    
     @IsNumber()
     @IsOptional()
     imageId: number
@@ -21,9 +20,6 @@ export class CreatePlaylistDto {
     @IsNumber({}, {each: true })
     musicIds: number[];
 
-
-
-    
     @IsOptional()
     @IsNumber()
     authorId: number
