@@ -64,11 +64,21 @@ export class PlaylistRepository {
 
     async findAll() {
         return await this.playlistRepository
-          .createQueryBuilder('playlist_entity')
-          .leftJoinAndSelect('playlist_entity.musics', 'musics')
-          .leftJoin('playlist_entity.user', 'user')
-          .addSelect(['user.id', 'user.email']) 
-          .getMany();
+            .createQueryBuilder('playlist_entity')
+            .leftJoinAndSelect('playlist_entity.musics', 'musics')
+            .leftJoinAndSelect('playlist_entity.user', 'user') 
+            .select([
+                'playlist_entity.id',
+                'playlist_entity.title',
+                'playlist_entity.description',
+                'playlist_entity.imageUrl',
+                'playlist_entity.createdAt',
+                'playlist_entity.updatedAt',
+                'musics.id',
+                'user.id',
+                'user.email'
+            ])
+            .getMany(); 
     }
 
 
